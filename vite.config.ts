@@ -23,9 +23,9 @@ export default defineConfig(() => {
         ],
         manifest: {
           id: '/',
-          name: 'SMART DOCX PRO',
-          short_name: 'SMART DOCX',
-          description: 'Trợ lý soạn thảo và thiết kế học liệu thông minh. Cài đặt trên máy tính, sử dụng ngay cả khi không có mạng.',
+          name: 'EduCompose Pro',
+          short_name: 'EduCompose',
+          description: 'Bộ công cụ biên soạn học liệu và đề thi. Cài đặt trên máy tính, sử dụng ngay cả khi không có mạng.',
           theme_color: '#0284c7',
           background_color: '#f8fafc',
           display: 'standalone',

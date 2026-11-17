@@ -1,6 +1,6 @@
 {
-  "name": "SMART DOCX PRO",
-  "description": "Trợ lý soạn thảo và thiết kế học liệu thông minh – Soạn thảo nhanh, Công thức chuẩn, Hình vẽ đẹp, Đề thi chuyên nghiệp.",
+  "name": "EduCompose Pro",
+  "description": "Bộ công cụ biên soạn học liệu và đề thi dành cho giáo viên.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
