@@ -6,7 +6,7 @@ import {
   Info,
   Menu,
   RefreshCw,
-  SlidersHorizontal,
+  MonitorDown,
   WifiOff,
   X,
 } from 'lucide-react';
@@ -100,12 +100,6 @@ const NAV_ITEMS: { key: AppTab; label: string }[] = [
   { key: 'guide', label: 'Hướng dẫn' },
 ];
 
-const FONT_SIZE_CHOICES: { value: UiFontSizeOption; label: string; hint: string }[] = [
-  { value: 15, label: 'Tiêu chuẩn', hint: '15px' },
-  { value: 16, label: 'Dễ đọc', hint: '16px' },
-  { value: 18, label: 'Chữ lớn', hint: '18px' },
-];
-
 function ModuleLoadingFallback() {
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-10 text-center ui-body text-slate-600">
@@ -117,8 +111,6 @@ function ModuleLoadingFallback() {
 export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const settingsRef = useRef<HTMLDivElement | null>(null);
 
   const [uiFontSize, setUiFontSize] = useState<UiFontSizeOption>(() => readStoredUiFontSize());
   const [selectedFormula, setSelectedFormula] = useState<FormulaItem | null>(null);
@@ -165,18 +157,6 @@ export default function App() {
       // Ignore storage error
     }
   }, [uiFontSize]);
-
-  // Close settings popover when clicking outside
-  useEffect(() => {
-    if (!settingsOpen) return;
-    const handleOutside = (e: MouseEvent) => {
-      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
-        setSettingsOpen(false);
-      }
-    };
-    window.addEventListener('mousedown', handleOutside);
-    return () => window.removeEventListener('mousedown', handleOutside);
-  }, [settingsOpen]);
 
   const notify = useCallback((message: string, tone: 'info' | 'success' | 'warning' = 'info') => {
     const id = Date.now();
@@ -231,7 +211,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900">
       {/* TOP NAVIGATION BAR */}
       <header className="sticky top-0 z-40 bg-white border-b border-slate-200 no-print">
-        <div className="max-w-[1560px] mx-auto px-4 sm:px-6 min-h-[60px] flex items-center justify-between gap-4">
+        <div className="max-w-[1560px] mx-auto px-3 sm:px-6 min-h-[56px] flex items-center justify-between gap-2">
           {/* Zone 1: Brand Title */}
           <a
             href="#trang-chu"
@@ -239,87 +219,31 @@ export default function App() {
               e.preventDefault();
               handleNavigate('home');
             }}
-            className="text-[19px] font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0"
+            className="text-[14px] sm:text-[19px] font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0"
           >
-            SMART DOCX PRO
+            EduCompose Pro
           </a>
 
-          {/* Zone 2: Primary Navigation Links (10 tabs, wraps cleanly at xl/lg without overflow) */}
-          <nav
-            aria-label="Điều hướng chính"
-            className="hidden lg:flex flex-wrap items-center justify-center gap-x-4 xl:gap-x-5 gap-y-1 ui-nav font-medium"
-          >
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeTab === item.key;
-              return (
-                <button
-                  key={item.key}
-                  type="button"
-                  onClick={() => handleNavigate(item.key)}
-                  className={`py-3.5 border-b-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    isActive
-                      ? 'border-sky-600 text-sky-700 font-semibold'
-                      : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Zone 3: Primary Action + Display Font Setting + Mobile Menu Trigger */}
+          {/* Zone 3: Primary Action + App Installation + Mobile Menu Trigger */}
           <div className="flex items-center gap-2 shrink-0">
-            <div ref={settingsRef} className="relative">
+            {(!pwa.isInstalled || pwa.isInstallable) && (
               <button
                 type="button"
-                aria-expanded={settingsOpen}
-                aria-label="Cài đặt cỡ chữ giao diện"
-                onClick={() => setSettingsOpen((v) => !v)}
-                className="inline-flex items-center gap-1.5 px-3 min-h-[40px] ui-btn font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap shrink-0"
+                onClick={async () => {
+                  const result = await pwa.triggerInstall();
+                  if (result === 'accepted') notify('Đã cài đặt ứng dụng.', 'success');
+                  if (result === 'unavailable') {
+                    handleNavigate('home');
+                    notify('Chọn Cài đặt ứng dụng tại Trang chủ để xem hướng dẫn cài đặt.', 'info');
+                  }
+                }}
+                aria-label="Cài đặt App"
+                className="inline-flex items-center gap-2 px-3 min-h-[40px] ui-btn font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 whitespace-nowrap"
               >
-                <SlidersHorizontal className="w-4 h-4 text-slate-600" />
-                <span className="hidden sm:inline">Cỡ chữ ({uiFontSize}px)</span>
+                <MonitorDown className="w-4 h-4" />
+                <span className="hidden sm:inline">Cài đặt App</span>
               </button>
-
-              {settingsOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-xl shadow-lg p-4 z-50 space-y-3">
-                  <div>
-                    <div className="ui-group-title text-slate-900">Cỡ chữ giao diện</div>
-                    <p className="ui-caption text-slate-500 mt-0.5">
-                      Chỉ thay đổi cỡ chữ hiển thị màn hình; tài liệu Word xuất ra luôn giữ Times New Roman 13pt.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-1.5">
-                    {FONT_SIZE_CHOICES.map((opt) => (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => {
-                          setUiFontSize(opt.value);
-                          notify(`Đã chuyển cỡ chữ giao diện sang ${opt.label} (${opt.hint}).`, 'info');
-                        }}
-                        className={`px-2 py-2 rounded-lg border text-center transition-colors ${
-                          uiFontSize === opt.value
-                            ? 'bg-sky-600 text-white border-sky-600 font-semibold'
-                            : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100'
-                        }`}
-                      >
-                        <div className="text-[14px] leading-tight">{opt.label}</div>
-                        <div
-                          className={`text-[13px] mt-0.5 tabular-nums ${
-                            uiFontSize === opt.value ? 'text-sky-100' : 'text-slate-500'
-                          }`}
-                        >
-                          {opt.hint}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
 
             <button
               type="button"
@@ -333,6 +257,7 @@ export default function App() {
             <button
               type="button"
               aria-label="Mở menu điều hướng"
+              aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen((v) => !v)}
               className="lg:hidden p-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50"
             >
@@ -340,6 +265,31 @@ export default function App() {
             </button>
           </div>
         </div>
+
+          {/* Zone 2: Primary Navigation Links (10 tabs, wraps cleanly at xl/lg without overflow) */}
+          <nav
+            aria-label="Điều hướng chính"
+            className="hidden lg:flex flex-wrap items-center justify-start gap-x-4 xl:gap-x-5 gap-y-0 text-[15px] font-medium max-w-[1560px] mx-auto px-4 sm:px-6 border-t border-slate-100"
+          >
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeTab === item.key;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => handleNavigate(item.key)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`py-2.5 border-b-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                    isActive
+                      ? 'border-sky-600 text-sky-700 font-semibold'
+                      : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
 
         {/* Mobile / Tablet Drawer */}
         {mobileMenuOpen && (
