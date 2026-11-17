@@ -52,20 +52,6 @@ const WordToolsPage = lazy(() =>
   import('./modules/word/WordToolsPage').then((m) => ({ default: m.WordToolsPage }))
 );
 
-export type UiFontSizeOption = 15 | 16 | 18;
-const UI_FONT_STORAGE_KEY = 'smart_docx_ui_font_size';
-
-function readStoredUiFontSize(): UiFontSizeOption {
-  try {
-    const raw = localStorage.getItem(UI_FONT_STORAGE_KEY);
-    if (raw === '16') return 16;
-    if (raw === '18') return 18;
-  } catch {
-    // Ignore localStorage unavailability
-  }
-  return 15;
-}
-
 function createInitialDocument(): WordDocumentRecord {
   const now = Date.now();
   return {
@@ -112,7 +98,6 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const [uiFontSize, setUiFontSize] = useState<UiFontSizeOption>(() => readStoredUiFontSize());
   const [selectedFormula, setSelectedFormula] = useState<FormulaItem | null>(null);
   const [selectedDrawing, setSelectedDrawing] = useState<DrawingProject | null>(null);
   const [drawingStudioMode, setDrawingStudioMode] = useState<DrawingStudioMode>('canvas');
@@ -147,16 +132,6 @@ export default function App() {
   useEffect(() => {
     runRichTextMigrationIfNeeded();
   }, []);
-
-  // Sync CSS variable & localStorage whenever UI font size changes
-  useEffect(() => {
-    document.documentElement.style.setProperty('--ui-font-size', `${uiFontSize}px`);
-    try {
-      localStorage.setItem(UI_FONT_STORAGE_KEY, String(uiFontSize));
-    } catch {
-      // Ignore storage error
-    }
-  }, [uiFontSize]);
 
   const notify = useCallback((message: string, tone: 'info' | 'success' | 'warning' = 'info') => {
     const id = Date.now();
@@ -419,8 +394,6 @@ export default function App() {
 
         {activeTab === 'projects' && (
           <ProjectsPage
-            uiFontSize={uiFontSize}
-            onChangeUiFontSize={setUiFontSize}
             onOpenFormula={(formula) => {
               setSelectedFormula(formula);
               setActiveTab('formula');
