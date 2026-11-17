@@ -27,6 +27,16 @@ const NARY_CHARS = new Set(['∑', '∏', '∫', '∬', '∭', '∮', '⋃', '�
 const ACCENT_MAP: Record<string, string> = {
   '\u2192': '\u20D7', // right arrow -> combining right arrow above
   '\u20D7': '\u20D7',
+  '←': '\u20D6',
+  '↔': '\u20E1',
+  '⃖': '\u20D6',
+  '⃡': '\u20E1',
+  '⃛': '\u20DB',
+  '…': '\u20DB',
+  '̂': '\u0302',
+  '̃': '\u0303',
+  '̇': '\u0307',
+  '̈': '\u0308',
   '^': '\u0302',
   'ˆ': '\u0302',
   '~': '\u0303',
@@ -328,8 +338,12 @@ export function convertMathmlToOmml(mathmlInput: string, rawLatex = ''): OmmlCon
         const overTxt = getText(over);
 
         // Overline bar
-        if (overTxt === '¯' || overTxt === '\u00AF' || overTxt === '―' || overTxt === '‾') {
+        if (overTxt === '¯' || overTxt === '\u00AF' || overTxt === '―' || overTxt === '‾' || overTxt === '̅') {
           return `<m:bar><m:barPr><m:pos m:val="top"/></m:barPr><m:e>${convertNode(base)}</m:e></m:bar>`;
+        }
+
+        if (['⏞', '︷', '⏜', '⏠'].includes(overTxt)) {
+          return `<m:groupChr><m:groupChrPr><m:chr m:val="${escapeXml(overTxt)}"/><m:pos m:val="top"/><m:vertJc m:val="bot"/></m:groupChrPr><m:e>${convertNode(base)}</m:e></m:groupChr>`;
         }
 
         // Accent marks (\vec, \hat, \tilde, \dot, \ddot)
@@ -353,6 +367,9 @@ export function convertMathmlToOmml(mathmlInput: string, rawLatex = ''): OmmlCon
         const underTxt = getText(under);
         if (underTxt === '_' || underTxt === '̲') {
           return `<m:bar><m:barPr><m:pos m:val="bot"/></m:barPr><m:e>${convertNode(base)}</m:e></m:bar>`;
+        }
+        if (['⏟', '︸', '⏝'].includes(underTxt)) {
+          return `<m:groupChr><m:groupChrPr><m:chr m:val="${escapeXml(underTxt)}"/><m:pos m:val="bot"/><m:vertJc m:val="top"/></m:groupChrPr><m:e>${convertNode(base)}</m:e></m:groupChr>`;
         }
         return `<m:limLow><m:e>${convertNode(base)}</m:e><m:lim>${convertNode(under)}</m:lim></m:limLow>`;
       }
