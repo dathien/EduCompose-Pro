@@ -11,7 +11,7 @@ export interface VisualEquationTemplate {
 }
 
 export interface VisualEquationGroup {
-  id: 'basic' | 'relations' | 'calculus' | 'geometry' | 'physics' | 'chemistry';
+  id: 'basic' | 'relations' | 'calculus' | 'geometry' | 'physics' | 'chemistry' | 'accents';
   label: string;
   items: VisualEquationTemplate[];
 }
@@ -26,6 +26,117 @@ export function buildMatrixLatex(
   ).join(' \\\\ ');
   return `\\begin{${kind}} ${rowStr} \\end{${kind}}`;
 }
+
+export const ACCENT_ITEMS: VisualEquationTemplate[] = [
+  {
+    "id": "accent_0",
+    "previewLatex": "\\overline{AB}",
+    "insertLatex": "\\overline{#?}",
+    "tooltip": "Gạch ngang dài"
+  },
+  {
+    "id": "accent_1",
+    "previewLatex": "\\bar{P}",
+    "insertLatex": "\\bar{#?}",
+    "tooltip": "Gạch ngang ngắn"
+  },
+  {
+    "id": "accent_2",
+    "previewLatex": "\\overline{\\overline{AB}}",
+    "insertLatex": "\\overline{\\overline{#?}}",
+    "tooltip": "Gạch ngang kép"
+  },
+  {
+    "id": "accent_3",
+    "previewLatex": "\\hat{A}",
+    "insertLatex": "\\hat{#?}",
+    "tooltip": "Dấu mũ"
+  },
+  {
+    "id": "accent_4",
+    "previewLatex": "\\widehat{ABC}",
+    "insertLatex": "\\widehat{#?}",
+    "tooltip": "Dấu mũ dài"
+  },
+  {
+    "id": "accent_5",
+    "previewLatex": "\\overrightarrow{AB}",
+    "insertLatex": "\\overrightarrow{#?}",
+    "tooltip": "Vectơ sang phải"
+  },
+  {
+    "id": "accent_6",
+    "previewLatex": "\\overleftarrow{AB}",
+    "insertLatex": "\\overleftarrow{#?}",
+    "tooltip": "Vectơ sang trái"
+  },
+  {
+    "id": "accent_7",
+    "previewLatex": "\\overleftrightarrow{AB}",
+    "insertLatex": "\\overleftrightarrow{#?}",
+    "tooltip": "Mũi tên hai chiều"
+  },
+  {
+    "id": "accent_8",
+    "previewLatex": "\\dot{x}",
+    "insertLatex": "\\dot{#?}",
+    "tooltip": "Một dấu chấm"
+  },
+  {
+    "id": "accent_9",
+    "previewLatex": "\\ddot{x}",
+    "insertLatex": "\\ddot{#?}",
+    "tooltip": "Hai dấu chấm"
+  },
+  {
+    "id": "accent_10",
+    "previewLatex": "\\dddot{x}",
+    "insertLatex": "\\dddot{#?}",
+    "tooltip": "Ba dấu chấm"
+  },
+  {
+    "id": "accent_11",
+    "previewLatex": "\\widetilde{AB}",
+    "insertLatex": "\\widetilde{#?}",
+    "tooltip": "Dấu ngã"
+  },
+  {
+    "id": "accent_12",
+    "previewLatex": "\\overgroup{AB}",
+    "insertLatex": "\\overgroup{#?}",
+    "tooltip": "Dấu cung"
+  },
+  {
+    "id": "accent_13",
+    "previewLatex": "\\underline{AB}",
+    "insertLatex": "\\underline{#?}",
+    "tooltip": "Gạch dưới"
+  },
+  {
+    "id": "accent_14",
+    "previewLatex": "\\overbrace{AB}",
+    "insertLatex": "\\overbrace{#?}",
+    "tooltip": "Ngoặc nhọn trên"
+  },
+  {
+    "id": "accent_15",
+    "previewLatex": "\\underbrace{AB}",
+    "insertLatex": "\\underbrace{#?}",
+    "tooltip": "Ngoặc nhọn dưới"
+  },
+  {
+    "id": "remove_above",
+    "previewLatex": "P",
+    "insertLatex": "@remove-above",
+    "tooltip": "Bỏ dấu trên (chọn cả biểu thức có dấu)"
+  },
+  {
+    "id": "remove_below",
+    "previewLatex": "AB",
+    "insertLatex": "@remove-below",
+    "tooltip": "Bỏ dấu dưới (chọn cả biểu thức có dấu)"
+  }
+];
 
 export const EQUATION_TOOLBAR_GROUPS: VisualEquationGroup[] = [
   {
@@ -55,6 +166,11 @@ export const EQUATION_TOOLBAR_GROUPS: VisualEquationGroup[] = [
       { id: 'bracket', previewLatex: '[a; b]', insertLatex: '\\left[#?\\right]', tooltip: 'Ngoặc vuông co giãn' },
       { id: 'brace', previewLatex: '\\{a, b\\}', insertLatex: '\\left\\{#?\\right\\}', tooltip: 'Ngoặc nhọn tập hợp' },
     ],
+  },
+  {
+    id: 'accents',
+    label: 'Dấu trên và dấu dưới',
+    items: ACCENT_ITEMS,
   },
   {
     id: 'relations',

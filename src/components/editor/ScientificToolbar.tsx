@@ -97,9 +97,9 @@ const KatexSymbolButton: React.FC<{
       aria-label={tooltip}
       onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
-      className="min-h-[34px] min-w-[36px] px-2 py-1 rounded-md border border-slate-200 bg-white hover:bg-sky-50 hover:border-sky-400 text-slate-900 flex items-center justify-center transition-colors shrink-0"
+      className="min-h-[40px] min-w-[40px] px-2 py-1 rounded-md border border-slate-200 bg-white hover:bg-sky-50 hover:border-sky-400 text-slate-900 flex items-center justify-center transition-colors shrink-0"
     >
-      <span className="text-[14px] leading-none pointer-events-none" dangerouslySetInnerHTML={{ __html: html }} />
+      <span className="text-[18px] leading-none pointer-events-none" dangerouslySetInnerHTML={{ __html: html }} />
     </button>
   );
 });
@@ -754,15 +754,18 @@ export const ScientificToolbar: React.FC<ScientificToolbarProps> = ({
             {activeGroup.items.map((item) => (
               <KatexSymbolButton
                 key={item.id}
-                previewLatex={item.previewLatex}
+                previewLatex={item.id.startsWith('remove_') ? (item.id === 'remove_above' ? '\\overline{P}\\to P' : '\\underline{AB}\\to AB') : item.previewLatex}
                 tooltip={item.tooltip}
-                onClick={() => handleInsertFormula(item.insertLatex, item.display || 'inline')}
+                onClick={() => {
+                  if (item.id.startsWith('remove_') && !groupCtx?.activeMathTarget) return;
+                  handleInsertFormula(item.insertLatex, item.display || 'inline');
+                }}
               />
             ))}
           </div>
 
           <div className="text-[13px] text-slate-600">
-            Chọn biểu tượng trên thanh công cụ để chèn công thức. Nhấp trực tiếp vào công thức để chỉnh sửa.
+            {activeEqGroup === 'accents' ? 'Bôi đen ký tự để thêm dấu; chọn cả biểu thức có dấu để đổi hoặc bỏ dấu. Nếu chưa chọn, công cụ sẽ tạo ô nhập.' : 'Chọn biểu tượng trên thanh công cụ để chèn công thức. Nhấp trực tiếp vào công thức để chỉnh sửa.'}
           </div>
         </div>
       )}

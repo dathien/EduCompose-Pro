@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import type { Editor } from '@tiptap/react';
 import type { MathfieldElement } from 'mathlive';
+import { insertScientificMath, isAccentRemoval } from './accentCommands';
 import { createFormulaNodeId } from '../../core/math/richTextCodec';
 
 export interface ActiveMathTarget {
@@ -82,16 +83,14 @@ export const ScientificEditorGroupProvider: React.FC<{ children: React.ReactNode
       // Case 1: Cursor is currently editing inside an inline <math-field>
       if (activeMathTarget?.mathfield && activeMathTarget.mathfield.isConnected) {
         try {
-          activeMathTarget.mathfield.focus();
-          activeMathTarget.mathfield.insert(latex, {
-            focus: true,
-            selectionMode: 'placeholder',
-          });
+          insertScientificMath(activeMathTarget.mathfield, latex);
           return;
         } catch {
           // Fallback to inserting a new node in active Tiptap editor
         }
       }
+
+      if (isAccentRemoval(latex)) return;
 
       // Case 2: Insert a new mathNode at current Tiptap cursor and open inline edit immediately
       const targetId = activeEditorId || editorsMapRef.current.keys().next().value || null;

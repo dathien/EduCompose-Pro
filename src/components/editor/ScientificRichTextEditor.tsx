@@ -154,7 +154,7 @@ const ScientificRichTextEditorInner: React.FC<ScientificRichTextEditorProps> = (
       groupCtx.insertFormulaLatex(latex, display);
       return;
     }
-    if (!isEditorAlive(editor)) return;
+    if (!isEditorAlive(editor) || latex.startsWith('@remove-')) return;
     const nodeId = createFormulaNodeId();
     editor
       .chain()
