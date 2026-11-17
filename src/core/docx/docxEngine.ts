@@ -598,7 +598,7 @@ export async function exportDocumentBlocksToDocxBlob(
   }
 
   if (bodyChunks.length === 0) {
-    bodyChunks.push(buildParagraphXml('Tài liệu mới được tạo từ SMART DOCX PRO.', { sizeHalfPt: 26 }));
+    bodyChunks.push(buildParagraphXml('Tài liệu mới được tạo từ EduCompose Pro.', { sizeHalfPt: 26 }));
   }
 
   if (ommlWarnings.length > 0 && onWarnings) {
