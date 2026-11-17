@@ -137,10 +137,10 @@ export const ExamShufflerPage: React.FC<ExamShufflerPageProps> = ({ sourceExam, 
         <div className="space-y-1">
           <div className="flex items-center gap-2.5">
             <Shuffle className="w-6 h-6 text-sky-600 shrink-0" />
-            <h1 className="ui-page-title text-slate-900">Trộn đề trắc nghiệm & Ánh xạ đáp án chuẩn xác</h1>
+            <h1 className="ui-page-title text-slate-900">Trộn đề kiểm tra</h1>
           </div>
           <p className="ui-body text-slate-600">
-            Sử dụng định danh câu hỏi & đáp án bất biến (Stable-ID) bảo đảm 100% đáp án không bao giờ lệch khi hoán vị cả câu và phương án A/B/C/D hoặc ý Đúng/Sai.
+            Chọn đề gốc, kiểm tra nội dung, thiết lập số mã đề và xuất đề kèm đáp án.
           </p>
         </div>
 
@@ -152,14 +152,14 @@ export const ExamShufflerPage: React.FC<ExamShufflerPageProps> = ({ sourceExam, 
             className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-2 bg-white border border-slate-300 text-slate-800 ui-btn font-medium rounded-lg hover:bg-slate-50"
           >
             <FileUp className="w-4 h-4 text-sky-600" />
-            <span>Nạp đề gốc từ .docx</span>
+            <span>Chọn đề Word</span>
           </button>
           <button
             type="button"
             onClick={() => setWorkingExam(sourceExam)}
             className="min-h-[40px] px-3.5 py-2 bg-slate-100 text-slate-700 ui-btn font-medium rounded-lg hover:bg-slate-200"
           >
-            Lấy từ tab Soạn đề ({sourceExam.questions.length} câu)
+            Lấy đề đang soạn ({sourceExam.questions.length} câu)
           </button>
           <button
             type="button"
@@ -172,6 +172,7 @@ export const ExamShufflerPage: React.FC<ExamShufflerPageProps> = ({ sourceExam, 
         </div>
       </div>
 
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2" aria-label="Quy trình trộn đề">{["1. Chọn đề gốc", "2. Kiểm tra nội dung", "3. Thiết lập và trộn", "4. Xem và xuất đề"].map(label => <div key={label} className="rounded-lg border border-slate-200 bg-white px-3 py-3 ui-guide font-medium text-slate-700">{label}</div>)}</div>
       {/* Config Panel */}
       <div className="bg-white border border-slate-200 rounded-xl p-5 grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
         <div className="lg:col-span-5 space-y-1">
