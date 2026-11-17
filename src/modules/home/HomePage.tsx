@@ -17,7 +17,6 @@ import {
   FolderPlus,
   FolderUp,
   FunctionSquare,
-  MonitorDown,
   Plus,
   ScanText,
   Shuffle,
@@ -230,7 +229,6 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [newParagraphText, setNewParagraphText] = useState('');
   const [newHeadingText, setNewHeadingText] = useState('');
   const [showDocumentComposer, setShowDocumentComposer] = useState(false);
-  const [showInstallGuide, setShowInstallGuide] = useState(false);
 
   // Starter expansion & preview states
   const [showAllSampleProjects, setShowAllSampleProjects] = useState(false);
@@ -241,24 +239,6 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [showAllRecommendedDrawings, setShowAllRecommendedDrawings] = useState(false);
 
   const adapter = getActiveDocumentAdapter();
-
-  const handleInstallAppClick = async () => {
-    if (!pwa) {
-      setShowInstallGuide((v) => !v);
-      return;
-    }
-    if (pwa.isInstallable) {
-      const outcome = await pwa.triggerInstall();
-      if (outcome === 'accepted') {
-        setShowInstallGuide(false);
-        onNotify('Đã cài đặt SMART DOCX PRO lên thiết bị của bạn.', 'success');
-      } else if (outcome === 'unavailable') {
-        setShowInstallGuide(true);
-      }
-      return;
-    }
-    setShowInstallGuide((v) => !v);
-  };
 
   const loadData = async () => {
     try {
@@ -498,32 +478,29 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* 1. BANNER GIỚI THIỆU GỌN GÀNG + CÀI ĐẶT ỨNG DỤNG + 6 NÚT CHỨC NĂNG */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 md:p-7 shadow-xs space-y-5">
+      {/* 1. BANNER GIỚI THIỆU VÀ 6 NÚT CHỨC NĂNG */}
+      <section className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-5">
           <div className="flex items-start gap-4 min-w-0 flex-1">
             <img
               src="/icon.svg"
-              alt="Biểu tượng SMART DOCX PRO"
+              alt="Biểu tượng EduCompose Pro"
               className="w-14 h-14 rounded-xl shrink-0"
               referrerPolicy="no-referrer"
             />
             <div className="min-w-0 space-y-1.5">
               <h1 className="ui-app-title text-slate-900 tracking-tight">
-                SMART DOCX PRO
+                EduCompose Pro
               </h1>
               <p className="text-[16px] text-sky-700 font-semibold leading-snug">
-                Trợ lý soạn thảo và thiết kế học liệu thông minh
-              </p>
-              <p className="text-[15px] sm:text-[16px] text-slate-700 leading-relaxed">
-                Soạn thảo dễ dàng – Công thức chuẩn – Hình vẽ đẹp – Đề thi chuyên nghiệp.
+                Bộ công cụ biên soạn học liệu và đề thi
               </p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5 text-[15px] text-slate-600">
-                <span>Cài đặt trên máy tính, sử dụng ngay cả khi không có mạng.</span>
+                <span>Cài đặt trên máy tính từ thanh menu.</span>
                 {pwa?.offlineVerified && (
                   <span className="inline-flex items-center gap-1.5 text-[14px] font-medium text-emerald-700">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
-                    <span>Đã sẵn sàng dùng ngoại tuyến</span>
+                    <span>Đã lưu bộ nhớ đệm ngoại tuyến</span>
                   </span>
                 )}
                 {pwa && !pwa.isOnline && (
@@ -536,55 +513,10 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end gap-2 shrink-0">
-            {pwa?.isInstalled && !pwa.isInstallable ? (
-              <div className="inline-flex items-center justify-center gap-2 px-5 min-h-[46px] bg-emerald-50 border border-emerald-200 text-emerald-800 text-[15px] font-semibold rounded-xl whitespace-nowrap">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                <span>Đã cài đặt</span>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={handleInstallAppClick}
-                className="inline-flex items-center justify-center gap-2 px-5 min-h-[46px] bg-emerald-600 text-white text-[15px] font-semibold rounded-xl hover:bg-emerald-700 transition-colors whitespace-nowrap shadow-xs"
-              >
-                <MonitorDown className="w-5 h-5 shrink-0" />
-                <span>Cài đặt ứng dụng</span>
-              </button>
-            )}
-          </div>
         </div>
 
-        {showInstallGuide && !(pwa?.isInstalled && !pwa.isInstallable) && (
-          <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-start justify-between gap-3 text-[14px] sm:text-[15px] text-slate-800">
-            <div className="space-y-1.5">
-              <div className="font-semibold text-emerald-900">
-                Hướng dẫn cài đặt SMART DOCX PRO lên máy tính hoặc thiết bị
-              </div>
-              {pwa?.isIOS ? (
-                <p className="leading-relaxed">
-                  Trên Safari iPhone/iPad: nhấn nút <strong>Chia sẻ</strong> ở thanh trình duyệt, sau đó chọn{' '}
-                  <strong>Thêm vào Màn hình chính</strong> để mở ứng dụng độc lập.
-                </p>
-              ) : (
-                <p className="leading-relaxed">
-                  Trên Google Chrome hoặc Microsoft Edge: nhấn vào biểu tượng <strong>Cài đặt</strong> (hình màn hình có mũi tên) ở góc phải thanh địa chỉ, hoặc mở menu trình duyệt <strong>⋮ → Lưu và chia sẻ → Cài đặt SMART DOCX PRO</strong> để đặt biểu tượng ra Desktop / Start Menu.
-                </p>
-              )}
-            </div>
-            <button
-              type="button"
-              aria-label="Đóng hướng dẫn cài đặt"
-              onClick={() => setShowInstallGuide(false)}
-              className="p-1.5 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-emerald-100 shrink-0"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-
         {/* Khu vực 6 nút chức năng riêng bên dưới */}
-        <div className="pt-5 border-t border-slate-200">
+        <div className="pt-3 border-t border-slate-200">
           <input
             ref={docxInputRef}
             type="file"
