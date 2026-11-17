@@ -68,7 +68,7 @@ export const GuidePage: React.FC<GuidePageProps> = ({ onNavigate }) => {
       <div className="lg:col-span-8 xl:col-span-9 space-y-6">
         <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-2">
           <h1 className="ui-page-title text-slate-900">
-            Hướng dẫn sử dụng SMART DOCX PRO dành cho Giáo viên
+            Hướng dẫn sử dụng EduCompose Pro dành cho Giáo viên
           </h1>
           <p className="ui-body text-slate-600">
             Tài liệu hướng dẫn chi tiết từng phân hệ đang hoạt động trong ứng dụng: từ soạn công thức Word OMML, vẽ hình học/đồ thị, thiết kế phiếu OMR, lập ma trận đề thi theo cấu trúc 3 phần, trộn đề bảo toàn ID đến chuẩn hóa tệp .docx trực tiếp bằng trình xử lý XML.
