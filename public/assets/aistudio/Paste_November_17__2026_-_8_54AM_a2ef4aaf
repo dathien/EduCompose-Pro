@@ -1,0 +1,1185 @@
+# PROMPT MASTER – XÂY DỰNG SMART DOCX PRO 2026
+
+## I. VAI TRÒ
+
+Bạn là đội ngũ chuyên gia phát triển phần mềm giáo dục, bao gồm:
+
+- Senior Full-stack Developer.
+- Software Architect.
+- UI/UX Designer.
+- Chuyên gia Microsoft Word, DOCX, OOXML và OMML.
+- Chuyên gia LaTeX, MathML, Typst.
+- Chuyên gia SVG, Canvas, đồ họa 2D và 3D.
+- Chuyên gia Toán học, Vật lí, Hóa học THPT.
+- Chuyên gia kiểm tra, đánh giá và thiết kế học liệu.
+
+Hãy trực tiếp xây dựng một ứng dụng Web App hoàn chỉnh, có chức năng hoạt động thực tế, không chỉ tạo giao diện mẫu hoặc mô tả chức năng.
+
+## II. THÔNG TIN ỨNG DỤNG
+
+**Tên ứng dụng:** SMART DOCX PRO
+
+**Tên tiếng Việt:** Trợ lý soạn thảo và thiết kế học liệu thông minh.
+
+**Slogan:** Soạn thảo nhanh – Công thức chuẩn – Hình vẽ đẹp – Đề thi chuyên nghiệp.
+
+**Đối tượng sử dụng:**
+
+- Giáo viên THCS, THPT, GDTX.
+- Giáo viên trung cấp, cao đẳng.
+- Giảng viên và người biên soạn học liệu.
+
+**Copyright:**
+
+Copyright © 2026 – Phát triển bởi Thầy Hồ Nguyễn Đa Thiện.
+
+## III. CÔNG NGHỆ VÀ KIẾN TRÚC
+
+Sử dụng:
+
+- HTML5, CSS3, JavaScript.
+- React, TypeScript, Vite.
+- MathLive: nhập và chỉnh sửa công thức trực quan.
+- MathJax hoặc KaTeX: hiển thị công thức.
+- Math.js: xử lý biểu thức toán học.
+- JSXGraph: hình học và đồ thị tương tác.
+- Fabric.js hoặc SVG Editor tự xây dựng: bảng vẽ kéo thả.
+- Three.js: hình học không gian 3D.
+- JSZip: đọc và xử lý cấu trúc DOCX.
+- docx.js: tạo tài liệu Word.
+- OOXML và OMML: xử lý công thức Word.
+- Tesseract.js: nhận dạng văn bản từ ảnh.
+- IndexedDB: lưu thư viện, dữ liệu và dự án.
+- Web Workers: xử lý tác vụ nặng.
+- PWA và Service Worker: hỗ trợ sử dụng ngoại tuyến.
+
+Chỉ lựa chọn các thư viện thực sự cần thiết, tránh tải nhiều thư viện trùng chức năng.
+
+Kiến trúc module độc lập, có khả năng tích hợp Microsoft Word Add-in bằng Office.js trong tương lai.
+
+Ứng dụng phải build thành công và có thể triển khai trên GitHub, Vercel.
+
+Không sử dụng API trả phí cho chức năng cốt lõi.
+
+Không bắt buộc người dùng nhập API key.
+
+Không bắt buộc đăng nhập ở phiên bản đầu tiên.
+
+Không sử dụng Firebase hoặc cơ sở dữ liệu trực tuyến khi chưa thực sự cần thiết.
+
+## IV. THIẾT KẾ GIAO DIỆN
+
+Thiết kế giao diện theo phong cách phần mềm soạn thảo giáo dục chuyên nghiệp.
+
+### 1. Tiêu chuẩn chung
+
+- Giao diện tiếng Việt.
+- Nền sáng, trắng hoặc xanh xám nhạt.
+- Màu chủ đạo xanh dương, xanh ngọc.
+- Font chữ giao diện 13px.
+- Tiêu đề từ 16–22px.
+- Font chữ tài liệu Word mặc định Times New Roman, 13pt.
+- Các biểu tượng trực quan, đồng nhất.
+- Responsive trên máy tính, máy tính bảng và điện thoại.
+- Không xuất hiện thanh cuộn ngang toàn trang.
+- Không để thanh menu bị tràn.
+- Không sử dụng popup hoặc modal làm gián đoạn thao tác.
+- Các công cụ chỉnh sửa hiển thị trực tiếp trong vùng làm việc.
+- Không hiển thị thông tin kỹ thuật, quy tắc nội bộ, dữ liệu debug hoặc tên API cho người dùng.
+
+### 2. Thanh menu chính
+
+Thiết kế các phân hệ:
+
+1. Trang chủ.
+2. Công thức.
+3. Vẽ hình.
+4. Đồ thị.
+5. Bảng biến thiên.
+6. Soạn đề.
+7. Ma trận – Đặc tả.
+8. Trộn đề.
+9. Phiếu OMR.
+10. Chuyển ảnh thành Word.
+11. Làm đẹp DOCX.
+12. Trình chiếu.
+13. Dự án của tôi.
+14. Hướng dẫn sử dụng.
+
+Nhóm các phân hệ liên quan hợp lý để menu không bị quá dài.
+
+### 3. Trang chủ
+
+Trang chủ phải có:
+
+- Tên và biểu tượng ứng dụng.
+- Banner giới thiệu chức năng.
+- Các thẻ truy cập nhanh.
+- Dự án đang thực hiện.
+- Công thức sử dụng gần đây.
+- Hình vẽ yêu thích.
+- Tài liệu Word gần đây.
+- Nút tạo tài liệu mới.
+- Nút mở tài liệu Word.
+- Hướng dẫn sử dụng nhanh.
+
+Không biến trang chủ thành bảng thông số kỹ thuật hoặc Dashboard dữ liệu không cần thiết.
+
+## V. PHÂN HỆ 1 – TRÌNH SOẠN THẢO CÔNG THỨC KHOA HỌC
+
+Xây dựng trình soạn thảo công thức có khả năng đáp ứng phần lớn nhu cầu sử dụng MathType trong dạy học phổ thông.
+
+### 1. Bố cục
+
+Chia vùng làm việc thành ba khu vực:
+
+- Bên trái: thư viện công thức theo môn học và chủ đề.
+- Bên phải phía trên: thanh công cụ và trình nhập công thức.
+- Bên phải phía dưới: vùng xem trước, chỉnh sửa và xuất công thức.
+
+Cho phép thay đổi chiều rộng giữa các vùng.
+
+Trên điện thoại, các khu vực tự động sắp xếp theo chiều dọc.
+
+### 2. Thanh công cụ toán học
+
+Cung cấp các nhóm ký hiệu:
+
+- Phép toán cơ bản.
+- Quan hệ, bất đẳng thức.
+- Tập hợp.
+- Logic toán học.
+- Chữ cái Hy Lạp.
+- Phân số.
+- Lũy thừa.
+- Chỉ số trên, chỉ số dưới.
+- Căn bậc hai, căn bậc n.
+- Giá trị tuyệt đối.
+- Dấu ngoặc.
+- Tổng, tích.
+- Giới hạn.
+- Đạo hàm.
+- Nguyên hàm, tích phân.
+- Logarithm.
+- Lượng giác.
+- Vectơ.
+- Ma trận, định thức.
+- Hệ phương trình.
+- Tổ hợp, chỉnh hợp, hoán vị.
+- Xác suất, thống kê.
+- Ký hiệu hình học.
+- Hình học tọa độ Oxy, Oxyz.
+
+Mỗi nút phải thực sự chèn được mẫu công thức vào vị trí con trỏ.
+
+Cho phép di chuyển con trỏ trong tử số, mẫu số, căn thức, số mũ và các trường của công thức.
+
+### 3. Thư viện công thức Toán học
+
+Phân loại theo lớp 10, 11, 12 và chủ đề:
+
+- Mệnh đề và tập hợp.
+- Bất phương trình.
+- Hàm số.
+- Hàm số bậc hai.
+- Phương trình và hệ phương trình.
+- Lượng giác.
+- Dãy số, cấp số cộng, cấp số nhân.
+- Giới hạn và tính liên tục.
+- Hàm số mũ và logarithm.
+- Đạo hàm.
+- Khảo sát hàm số.
+- Nguyên hàm và tích phân.
+- Vectơ.
+- Hình học phẳng.
+- Hình học không gian.
+- Phương pháp tọa độ.
+- Xác suất và thống kê.
+- Các đường conic.
+
+### 4. Thư viện công thức Vật lí
+
+Phân loại theo lớp và chương:
+
+- Đại lượng, đơn vị đo.
+- Động học.
+- Động lực học.
+- Công, năng lượng, công suất.
+- Động lượng.
+- Chuyển động tròn.
+- Biến dạng vật rắn.
+- Dao động điều hòa.
+- Sóng cơ.
+- Điện trường.
+- Dòng điện.
+- Mạch điện.
+- Từ trường.
+- Cảm ứng điện từ.
+- Vật lí nhiệt.
+- Khí lí tưởng.
+- Vật lí hạt nhân.
+- Phóng xạ.
+
+Hiển thị chính xác ký hiệu vectơ, chỉ số, đơn vị và quy ước dấu.
+
+### 5. Thư viện công thức Hóa học
+
+Bao gồm:
+
+- Ký hiệu nguyên tố.
+- Công thức phân tử.
+- Công thức cấu tạo.
+- Công thức cấu tạo thu gọn.
+- Đồng vị.
+- Ion dương, ion âm.
+- Số oxi hóa.
+- Phương trình hóa học.
+- Phương trình ion.
+- Phản ứng thuận nghịch.
+- Điều kiện phản ứng trên mũi tên.
+- Chất kết tủa.
+- Chất khí.
+- Nhiệt hóa học.
+- Cân bằng hóa học.
+- Acid, base, pH.
+- Hóa học hữu cơ.
+- Hydrocarbon.
+- Alcohol, phenol.
+- Aldehyde, ketone.
+- Carboxylic acid.
+- Ester, lipid.
+- Amine, amino acid, protein.
+- Polymer.
+- Điện hóa học.
+
+Sử dụng danh pháp và ký hiệu phù hợp chương trình hiện hành.
+
+Không sao chép máy móc công thức từ hình ảnh tham khảo nếu phát hiện sai kiến thức hoặc ký hiệu.
+
+Phải kiểm tra bảo toàn nguyên tố và điện tích đối với phương trình hóa học mẫu.
+
+### 6. Chế độ nhập công thức
+
+Hỗ trợ:
+
+- Trình soạn thảo trực quan.
+- LaTeX.
+- MathML.
+- Typst đối với các cú pháp đã được hỗ trợ và kiểm thử.
+
+Trình soạn thảo trực quan là chế độ mặc định.
+
+Giáo viên không cần biết lập trình hoặc LaTeX vẫn sử dụng được.
+
+Xem trước công thức theo thời gian thực.
+
+### 7. Chức năng chỉnh sửa
+
+- Nhấp trực tiếp vào công thức để sửa.
+- Sao chép.
+- Cắt, dán.
+- Hoàn tác, làm lại.
+- Thay đổi cỡ chữ.
+- Thay đổi màu sắc.
+- Đổi kiểu hiển thị phân số.
+- Thêm số thứ tự công thức.
+- Lưu công thức cá nhân.
+- Thêm vào thư viện yêu thích.
+- Tìm kiếm bằng từ khóa tiếng Việt có dấu và không dấu.
+
+### 8. Xuất công thức
+
+Cung cấp các nút:
+
+- Sao chép công thức.
+- Sao chép LaTeX.
+- Sao chép MathML.
+- Sao chép ảnh.
+- Lưu SVG.
+- Lưu PNG.
+- Xuất Word.
+- Lưu vào thư viện.
+
+Yêu cầu đặc biệt:
+
+Khi xuất Word, công thức được hỗ trợ phải chuyển thành OMML thật trong cấu trúc DOCX.
+
+Không chuyển toàn bộ công thức thành ảnh PNG.
+
+Không xuất chuỗi LaTeX thô rồi coi đó là công thức Word.
+
+Công thức OMML phải chỉnh sửa được bằng trình Equation trong Microsoft Word.
+
+Nếu gặp công thức chưa hỗ trợ chuyển đổi, phải thông báo cụ thể và cho phép chọn phương án thay thế.
+
+Không báo thành công giả.
+
+### 9. Dữ liệu thư viện
+
+Mục tiêu phát triển tối thiểu 1.000 mẫu công thức:
+
+- Toán học: 450 mẫu.
+- Vật lí: 300 mẫu.
+- Hóa học: 250 mẫu.
+
+Triển khai trước một bộ dữ liệu thực tế đã kiểm tra, sau đó mở rộng theo chương và lớp.
+
+Không tạo dữ liệu rỗng, công thức trùng lặp hoặc nội dung giả để đạt số lượng.
+
+Mỗi công thức có:
+
+- ID.
+- Tên công thức.
+- Môn học.
+- Khối lớp.
+- Chủ đề.
+- LaTeX hoặc biểu diễn toán học tương ứng.
+- Tên các đại lượng khi cần.
+- Điều kiện áp dụng.
+- Từ khóa tìm kiếm.
+
+## VI. PHÂN HỆ 2 – BẢNG VẼ KHOA HỌC KÉO THẢ
+
+Xây dựng một trình biên tập hình vẽ vector chuyên nghiệp phục vụ soạn đề và bài giảng.
+
+### 1. Bố cục giao diện
+
+- Cột trái: thư viện đối tượng.
+- Khu vực giữa: bảng vẽ.
+- Cột phải: thuộc tính đối tượng.
+- Phía trên: thanh công cụ.
+- Phía dưới: thanh trạng thái và công cụ xuất hình.
+
+Không để bảng thuộc tính che bảng vẽ.
+
+Cho phép thu gọn thư viện và bảng thuộc tính để mở rộng vùng làm việc.
+
+### 2. Công cụ bảng vẽ
+
+- Thêm đối tượng bằng kéo thả hoặc nhấp chuột.
+- Chọn một hoặc nhiều đối tượng.
+- Di chuyển.
+- Xoay tự do.
+- Thay đổi kích thước.
+- Nhân bản.
+- Xóa.
+- Khóa đối tượng.
+- Nhóm và tách nhóm.
+- Đổi màu nền.
+- Đổi màu đường viền.
+- Thay đổi độ dày nét.
+- Nét liền, nét đứt.
+- Thay đổi độ trong suốt.
+- Căn trái, phải, giữa.
+- Đưa lên trước, đưa xuống sau.
+- Hiện hoặc ẩn lưới.
+- Căn theo lưới.
+- Hoàn tác và làm lại.
+- Phóng to, thu nhỏ.
+- Toàn màn hình.
+- Vừa nội dung.
+- Chèn văn bản và công thức toán học.
+
+### 3. Kích thước bảng vẽ
+
+Hỗ trợ:
+
+- A3.
+- A4.
+- A5.
+- Khung ngang.
+- Khung dọc.
+- Tỉ lệ 16:9.
+- Tỉ lệ 4:3.
+- Kích thước tùy chỉnh theo cm.
+
+Cho phép xuất riêng vùng có nội dung thay vì toàn bộ vùng trắng.
+
+### 4. Thư viện hình Toán học
+
+Tạo các đối tượng SVG có tham số chỉnh sửa:
+
+**Hình học phẳng:**
+
+- Điểm, đoạn thẳng, đường thẳng, tia.
+- Góc, cung góc.
+- Tam giác thường, cân, đều, vuông.
+- Trung tuyến, trung trực, phân giác, đường cao.
+- Tứ giác, hình vuông, hình chữ nhật.
+- Hình thoi, hình bình hành, hình thang.
+- Đường tròn.
+- Tiếp tuyến, cát tuyến.
+- Tam giác nội tiếp, ngoại tiếp.
+
+**Hình học không gian:**
+
+- Hình lập phương.
+- Hình hộp chữ nhật.
+- Hình hộp.
+- Hình chóp tam giác.
+- Hình chóp tứ giác.
+- Hình chóp đều.
+- Hình lăng trụ.
+- Hình tứ diện.
+- Hình trụ.
+- Hình nón.
+- Hình cầu.
+- Thiết diện.
+- Hệ tọa độ Oxyz.
+- Mặt phẳng và đường thẳng trong không gian.
+
+Cho phép:
+
+- Thay đổi tên đỉnh.
+- Thay đổi tọa độ.
+- Thay đổi kích thước cạnh.
+- Hiện và ẩn cạnh khuất.
+- Tô màu thiết diện.
+- Đánh dấu góc vuông.
+- Đánh dấu cạnh bằng nhau.
+- Vẽ đường phụ.
+- Thêm nhãn và số đo.
+
+### 5. Thư viện hình Vật lí
+
+**Cơ học:**
+
+- Vật hình khối.
+- Chất điểm.
+- Lò xo.
+- Con lắc đơn.
+- Con lắc lò xo.
+- Mặt phẳng nghiêng.
+- Ròng rọc.
+- Xe lăn.
+- Dây treo.
+- Vectơ lực.
+- Trọng lực.
+- Phản lực.
+- Lực ma sát.
+- Mặt sàn và tường.
+- Chuyển động ném ngang.
+
+**Điện học:**
+
+- Nguồn điện.
+- Pin.
+- Điện trở.
+- Biến trở.
+- Bóng đèn.
+- Công tắc.
+- Ampe kế.
+- Vôn kế.
+- Tụ điện.
+- Cuộn cảm.
+- Diode.
+- Dây dẫn.
+- Nút nối mạch.
+- Mạch nối tiếp.
+- Mạch song song.
+
+Các linh kiện điện phải có điểm kết nối để dây dẫn bám chính xác.
+
+**Dao động và sóng:**
+
+- Sóng ngang.
+- Sóng dọc.
+- Sóng dừng.
+- Đồ thị dao động điều hòa.
+- Hai dao động lệch pha.
+- Sóng điện từ.
+- Giao thoa sóng.
+
+**Quang học và các hình hỗ trợ:**
+
+- Tia sáng.
+- Gương.
+- Thấu kính.
+- Lăng kính.
+- Sơ đồ đường truyền ánh sáng.
+
+### 6. Thư viện hình Hóa học
+
+**Dụng cụ thủy tinh:**
+
+- Cốc thủy tinh.
+- Ống nghiệm.
+- Ống nghiệm nghiêng.
+- Bình tam giác.
+- Bình cầu đáy tròn.
+- Bình cầu đáy bằng.
+- Bình định mức.
+- Ống đong.
+- Burette.
+- Pipette.
+- Phễu lọc.
+- Phễu chiết.
+- Bình hút ẩm.
+- Ống sinh hàn.
+- Bình thu khí.
+- Chậu nước.
+
+**Dụng cụ hỗ trợ:**
+
+- Đèn cồn.
+- Giá thí nghiệm.
+- Kẹp ống nghiệm.
+- Kẹp gỗ.
+- Chân đế.
+- Nút cao su.
+- Ống dẫn khí.
+- Ống nhỏ giọt.
+- Thìa hóa chất.
+- Cân điện tử.
+
+**Hiện tượng hóa học:**
+
+- Dung dịch trong suốt.
+- Dung dịch có màu.
+- Kết tủa.
+- Bọt khí.
+- Chất rắn.
+- Ngọn lửa.
+- Mực chất lỏng.
+- Hơi nước.
+
+Cho phép thay đổi:
+
+- Mức chất lỏng.
+- Màu dung dịch.
+- Màu kết tủa.
+- Số lượng bọt khí.
+- Nhãn hóa chất.
+- Hướng đặt dụng cụ.
+- Kích thước dụng cụ.
+
+Khi xoay dụng cụ chứa chất lỏng, ưu tiên xử lý mặt thoáng phù hợp với phương trọng lực đối với hình mô phỏng thực nghiệm.
+
+**Cấu trúc phân tử:**
+
+- Nguyên tử.
+- Liên kết đơn.
+- Liên kết đôi.
+- Liên kết ba.
+- Vòng benzene.
+- Mạch carbon.
+- Nhóm chức.
+- Mô hình phân tử đơn giản.
+
+### 7. Thư viện hình Sinh học và Tin học
+
+Thiết kế kiến trúc mở rộng để bổ sung:
+
+- Tế bào.
+- DNA.
+- Nhiễm sắc thể.
+- Sơ đồ di truyền.
+- Lưu đồ thuật toán.
+- Sơ đồ mạng máy tính.
+- Cây thư mục.
+- Sơ đồ cấu trúc dữ liệu.
+
+### 8. Hình mẫu hoàn chỉnh
+
+Ngoài các đối tượng riêng lẻ, cung cấp thư viện hình mẫu đã lắp ghép:
+
+- Thí nghiệm điều chế và thu khí.
+- Bộ dụng cụ chưng cất.
+- Bộ dụng cụ lọc.
+- Thí nghiệm chuẩn độ.
+- Mạch điện nối tiếp và song song.
+- Con lắc lò xo.
+- Vật trên mặt phẳng nghiêng.
+- Hệ ròng rọc.
+- Hình chóp có đường cao.
+- Hình lập phương có thiết diện.
+- Đường tròn lượng giác.
+- Hệ tọa độ không gian.
+
+Khi chèn hình mẫu, giáo viên phải có thể tách nhóm và chỉnh sửa từng thành phần.
+
+### 9. Thư viện hình vẽ
+
+Mục tiêu phát triển tối thiểu 500 mẫu:
+
+- Toán học: 180 mẫu.
+- Vật lí: 140 mẫu.
+- Hóa học: 140 mẫu.
+- Sinh học: 20 mẫu.
+- Tin học: 20 mẫu.
+
+Không dùng emoji, hình ảnh ngẫu nhiên hoặc hình giữ chỗ để thay thế dụng cụ khoa học.
+
+Hình vẽ phải sắc nét, đúng cấu tạo, phù hợp in đề thi đen trắng.
+
+### 10. Xuất hình và lưu dự án
+
+- Sao chép ảnh.
+- Xuất SVG.
+- Xuất PNG nền trắng.
+- Xuất PNG nền trong suốt.
+- Chọn độ phân giải xuất ảnh.
+- Xuất hình chất lượng 300 DPI theo kích thước in.
+- Xuất sang DOCX.
+- Lưu dự án dạng JSON.
+- Mở lại dự án.
+- Tự động lưu vào IndexedDB.
+
+Lưu cả cấu trúc đối tượng và tham số để mở lại vẫn chỉnh sửa được.
+
+Không chỉ lưu ảnh chụp bảng vẽ.
+
+## VII. PHÂN HỆ 3 – VẼ ĐỒ THỊ THÔNG MINH
+
+Xây dựng đồ thị từ hàm số thực, không sử dụng ảnh đồ thị cố định.
+
+### 1. Các dạng đồ thị
+
+- Hàm số bậc nhất.
+- Hàm số bậc hai.
+- Hàm số bậc ba.
+- Hàm số bậc bốn trùng phương.
+- Hàm phân thức.
+- Hàm mũ.
+- Hàm logarithm.
+- Hàm lượng giác.
+- Hàm chứa căn.
+- Hàm giá trị tuyệt đối.
+- Hàm từng đoạn.
+- Đường tròn.
+- Ellipse.
+- Hyperbola.
+- Parabola.
+
+### 2. Tính năng
+
+- Nhập biểu thức hàm số.
+- Thay đổi tham số bằng slider.
+- Vẽ nhiều đồ thị trên một hệ tọa độ.
+- Thay đổi màu và kiểu nét.
+- Tìm nghiệm trong phạm vi và dạng được hỗ trợ.
+- Xác định giao điểm.
+- Xác định cực trị.
+- Vẽ tiếp tuyến.
+- Hiện tiệm cận.
+- Đánh dấu điểm đặc biệt.
+- Tô miền giới hạn.
+- Hiện và ẩn lưới.
+- Thay đổi miền xác định.
+- Tùy chỉnh tỷ lệ trục.
+- Xuất SVG, PNG và Word.
+
+Không nối đường đồ thị qua điểm gián đoạn hoặc tiệm cận đứng.
+
+Không tạo kết quả khảo sát hàm số giả khi thuật toán chưa xử lý được.
+
+## VIII. PHÂN HỆ 4 – HÌNH HỌC KHÔNG GIAN 3D
+
+Sử dụng Three.js để tạo mô hình tương tác.
+
+Hỗ trợ:
+
+- Hình lập phương.
+- Hình hộp chữ nhật.
+- Hình lăng trụ.
+- Hình chóp.
+- Hình tứ diện.
+- Hình trụ.
+- Hình nón.
+- Hình cầu.
+- Hệ tọa độ Oxyz.
+
+Tính năng:
+
+- Xoay mô hình bằng chuột hoặc cảm ứng.
+- Phóng to, thu nhỏ.
+- Thay đổi chiều dài, rộng, cao.
+- Hiện và ẩn mặt.
+- Thay đổi độ trong suốt.
+- Hiện cạnh khuất bằng nét đứt.
+- Ghi tên đỉnh.
+- Vẽ vectơ.
+- Hiện mặt phẳng.
+- Hiện thiết diện đối với các dạng đã hỗ trợ.
+- Đặt lại góc nhìn.
+- Chuyển chế độ 3D sang hình biểu diễn 2D.
+- Xuất hình phục vụ đề kiểm tra.
+
+Mô hình phải thực sự xoay được, không sử dụng hình ảnh 2D giả lập 3D.
+
+## IX. PHÂN HỆ 5 – BẢNG BIẾN THIÊN TỰ ĐỘNG
+
+Giáo viên nhập hàm số, hệ thống thực hiện:
+
+1. Xác định tập xác định.
+2. Tính đạo hàm.
+3. Tìm điểm tới hạn.
+4. Xét dấu đạo hàm.
+5. Tính các giới hạn cần thiết.
+6. Xác định khoảng đồng biến và nghịch biến.
+7. Xác định điểm cực trị.
+8. Tạo bảng biến thiên.
+9. Kiểm tra và cho phép chỉnh sửa kết quả.
+
+Hỗ trợ các hàm đa thức và phân thức phù hợp THPT trước.
+
+Mở rộng các dạng phức tạp sau khi đã kiểm thử.
+
+Phải hiển thị đúng:
+
+- Âm vô cực, dương vô cực.
+- Điểm không xác định.
+- Đường phân cách.
+- Mũi tên đi lên, đi xuống.
+- Dấu đạo hàm.
+- Giá trị cực trị.
+- Các giới hạn một phía.
+
+Cho phép chỉnh sửa từng ô trong bảng.
+
+Xuất SVG, PNG và bảng Word kết hợp OMML.
+
+## X. PHÂN HỆ 6 – SOẠN ĐỀ KIỂM TRA THÔNG MINH
+
+Thiết kế trình soạn đề trực quan có:
+
+- Văn bản định dạng.
+- Công thức toán học.
+- Công thức hóa học.
+- Hình vẽ.
+- Đồ thị.
+- Bảng biểu.
+- Câu hỏi có ngữ liệu chung.
+
+Hỗ trợ:
+
+- Trắc nghiệm nhiều lựa chọn.
+- Trắc nghiệm đúng/sai gồm bốn ý.
+- Trả lời ngắn.
+- Tự luận.
+- Đề kết hợp nhiều hình thức.
+
+Cho phép thiết lập cấu trúc đề theo từng môn.
+
+Không áp dụng cứng cấu trúc 12–4–6 cho tất cả môn học.
+
+Mỗi câu hỏi có:
+
+- Mã câu hỏi.
+- Môn học.
+- Lớp.
+- Chủ đề.
+- Yêu cầu cần đạt.
+- Mức độ nhận thức.
+- Nội dung.
+- Phương án trả lời.
+- Đáp án.
+- Lời giải.
+- Điểm số.
+- Nguồn câu hỏi nếu có.
+
+Hỗ trợ ngân hàng câu hỏi cá nhân, tìm kiếm và lọc dữ liệu.
+
+Tạo đề tự động từ ngân hàng câu hỏi theo điều kiện ma trận.
+
+Nếu ngân hàng thiếu câu hỏi phù hợp, thông báo rõ số lượng và nội dung còn thiếu.
+
+Không tự tạo câu hỏi vô nghĩa để lấp đầy đề.
+
+AI sinh câu hỏi mới là tính năng mở rộng, không phải điều kiện để sử dụng chức năng soạn đề.
+
+## XI. PHÂN HỆ 7 – MA TRẬN VÀ BẢN ĐẶC TẢ
+
+Hỗ trợ hai quy trình:
+
+**Quy trình A:** Ma trận → Bản đặc tả → Đề thi → Đáp án.
+
+**Quy trình B:** Tải đề Word → Phân tích đề → Ma trận → Bản đặc tả.
+
+Cho phép thiết lập:
+
+- Môn học.
+- Khối lớp.
+- Học kỳ.
+- Phạm vi kiến thức.
+- Chủ đề.
+- Yêu cầu cần đạt.
+- Số câu.
+- Số điểm.
+- Tỉ lệ các mức độ nhận thức.
+- Dạng thức câu hỏi.
+- Thời gian làm bài.
+
+Tự động kiểm tra tổng số câu, tổng điểm và sự nhất quán giữa ma trận, bản đặc tả, đề thi.
+
+Việc phân loại mức độ nhận thức tự động phải cho phép giáo viên duyệt và chỉnh sửa.
+
+Hỗ trợ nhiều cấu trúc ma trận theo yêu cầu từng đơn vị.
+
+Không tự khẳng định một biểu mẫu là mẫu chính thức mới nhất nếu chưa có tài liệu đối chiếu.
+
+Xuất ma trận và bản đặc tả sang Word, PDF, Excel.
+
+## XII. PHÂN HỆ 8 – TRỘN ĐỀ THI
+
+Cho phép:
+
+- Tải đề DOCX.
+- Nhận dạng câu hỏi và phương án.
+- Xem trước cấu trúc đề.
+- Trộn thứ tự câu hỏi.
+- Trộn phương án trả lời.
+- Cố định câu hỏi theo yêu cầu.
+- Giữ nguyên nhóm câu hỏi chung ngữ liệu.
+- Giữ liên kết hình ảnh với câu hỏi.
+- Giữ nguyên công thức OMML.
+- Tạo nhiều mã đề.
+
+Mã đề mặc định tăng dần:
+
+101, 102, 103, 104...
+
+Tự động cập nhật đáp án tương ứng từng mã đề.
+
+Không trộn câu hỏi qua các phần khác nhau.
+
+Không trộn phương án khi có điều kiện phụ thuộc thứ tự hoặc phương án tổng hợp chưa được xử lý.
+
+Xuất:
+
+- Từng đề Word.
+- Toàn bộ đề dạng ZIP.
+- Bảng đáp án.
+- Bảng ánh xạ câu hỏi.
+- File dữ liệu phục vụ chấm thi.
+
+## XIII. PHÂN HỆ 9 – THIẾT KẾ PHIẾU OMR
+
+Tạo thư viện phiếu trả lời:
+
+- Phiếu 10, 20, 30, 40, 50, 60, 80 và 100 câu.
+- Phiếu đúng/sai.
+- Phiếu trả lời ngắn.
+- Phiếu kết hợp ba phần.
+- Phiếu 12–4–6.
+- Phiếu A4.
+- Phiếu A5.
+- Phiếu A3.
+- Hai phiếu A5 trên một trang A4.
+- Phiếu có phần tự luận.
+- Phiếu cắt phách.
+
+Cho phép giáo viên tự thiết kế cấu trúc phiếu.
+
+Thông tin tùy chỉnh:
+
+- Tên trường.
+- Họ tên.
+- Lớp.
+- Môn học.
+- Số báo danh.
+- Mã đề.
+- Thời gian.
+
+Tạo mốc định vị phục vụ nhận dạng ảnh quét.
+
+Mỗi mẫu phiếu có metadata mô tả chính xác tọa độ vùng tô.
+
+Hỗ trợ chữ số, dấu âm và dấu phẩy thập phân ở phần trả lời ngắn.
+
+Xuất PDF đúng kích thước in 100%.
+
+Thiết kế chuẩn dữ liệu để có thể liên kết với ứng dụng chấm thi trắc nghiệm độc lập.
+
+## XIV. PHÂN HỆ 10 – CHUYỂN ẢNH THÀNH WORD
+
+Hỗ trợ:
+
+- Tải ảnh JPG, PNG.
+- Dán ảnh bằng Ctrl + V.
+- Kéo thả ảnh.
+- Cắt vùng nhận dạng.
+- Xoay và chỉnh ảnh.
+- Nhận dạng văn bản tiếng Việt, tiếng Anh.
+- Phân biệt văn bản và vùng chứa công thức.
+- Cho phép sửa công thức bằng MathLive.
+- Nhận dạng bảng biểu nếu công nghệ hỗ trợ.
+- Xuất DOCX.
+
+Giao diện hai vùng:
+
+- Bên trái là ảnh gốc.
+- Bên phải là nội dung nhận dạng và chỉnh sửa.
+
+Đánh dấu những vùng nhận dạng có độ tin cậy thấp.
+
+Không tự thay đổi số liệu, ký hiệu hoặc nội dung câu hỏi gốc.
+
+Tesseract.js chỉ dùng cho phần văn bản phù hợp.
+
+Công thức toán học phức tạp cần bộ nhận dạng chuyên biệt hoặc cơ chế nhập lại trực quan.
+
+Không giả lập chức năng OCR công thức.
+
+## XV. PHÂN HỆ 11 – LÀM ĐẸP VÀ CHUẨN HÓA DOCX
+
+Cho phép tải tài liệu Word lên và xử lý trực tiếp.
+
+### 1. Định dạng văn bản
+
+- Thay đổi font chữ.
+- Thay đổi cỡ chữ.
+- Căn lề.
+- Giãn dòng.
+- Khoảng cách đoạn.
+- Khổ giấy.
+- Đầu trang, chân trang.
+- Đánh số trang.
+
+### 2. Chuẩn hóa đề thi
+
+- Đánh số lại câu hỏi.
+- Đánh số theo từng phần.
+- Chuẩn hóa A, B, C, D.
+- Chuẩn hóa a, b, c, d.
+- In đậm nhãn câu hỏi.
+- In đậm nhãn phương án.
+- Căn thẳng hàng phương án.
+- Tự bố trí 4, 2 hoặc 1 phương án trên mỗi dòng tùy độ dài.
+- Bỏ khoảng trắng thừa.
+- Xử lý dòng trống.
+- Chuyển đánh số tự động Word thành văn bản thường khi người dùng yêu cầu.
+
+### 3. Đáp án và lời giải
+
+- Tách đáp án.
+- Tách lời giải.
+- Tạo bảng đáp án tổng hợp.
+- Tạo bản giáo viên.
+- Tạo bản học sinh.
+- Ẩn hoặc hiện đáp án.
+
+### 4. Bảo toàn dữ liệu
+
+Không làm mất:
+
+- Công thức OMML.
+- Hình ảnh.
+- Bảng biểu.
+- Siêu liên kết.
+- Cấu trúc câu hỏi.
+- Header và footer ngoài phạm vi chỉnh sửa.
+
+Luôn giữ bản gốc và cho phép tải bản đã xử lý dưới tên mới.
+
+Có chức năng hoàn tác và xem trước thay đổi.
+
+Không ghi đè file gốc.
+
+## XVI. PHÂN HỆ 12 – TRÌNH CHIẾU TƯƠNG TÁC
+
+Cho phép chuyển câu hỏi thành nội dung trình chiếu 16:9.
+
+Tính năng:
+
+- Hiển thị từng câu hỏi.
+- Câu trước, câu tiếp theo.
+- Đếm ngược thời gian.
+- Tạm dừng, tiếp tục.
+- Hiện và ẩn đáp án.
+- Hiện và ẩn lời giải.
+- Phóng to câu hỏi.
+- Toàn màn hình.
+- Chọn câu hỏi ngẫu nhiên.
+- Trình chiếu hình ảnh và đồ thị.
+- Điều chỉnh cỡ chữ.
+
+Không yêu cầu học sinh tạo tài khoản ở chế độ trình chiếu trực tiếp trên lớp.
+
+## XVII. TÍCH HỢP MICROSOFT WORD
+
+Thiết kế lớp tích hợp độc lập gồm:
+
+- WebDocumentAdapter.
+- WordOfficeAdapter.
+
+Trong phiên bản Web App:
+
+- Xuất DOCX.
+- Sao chép ảnh.
+- Sao chép mã công thức.
+- Tải file đã chỉnh sửa.
+
+Trong phiên bản Word Add-in:
+
+- Sử dụng Office.js.
+- Chèn công thức tại vị trí con trỏ.
+- Chèn hình vẽ.
+- Chèn bảng.
+- Đọc phần văn bản đang chọn.
+- Chỉnh sửa tài liệu trong phạm vi cho phép.
+- Chèn đề thi hoàn chỉnh.
+
+Kiểm tra khả năng hỗ trợ của Word trước khi sử dụng Office API.
+
+Không hiển thị nút chèn trực tiếp vào Word như một chức năng đã hoạt động khi đang chạy ngoài môi trường Word.
+
+Không mô phỏng thông báo chèn Word thành công nếu chưa thực sự thực hiện.
+
+## XVIII. LƯU TRỮ VÀ QUẢN LÝ DỰ ÁN
+
+Sử dụng IndexedDB để lưu:
+
+- Công thức cá nhân.
+- Công thức yêu thích.
+- Hình vẽ cá nhân.
+- Dự án hình học.
+- Ngân hàng câu hỏi.
+- Đề kiểm tra.
+- Ma trận.
+- Mẫu phiếu OMR.
+- Cài đặt người dùng.
+
+Hỗ trợ:
+
+- Tự động lưu.
+- Đổi tên dự án.
+- Nhân bản.
+- Tìm kiếm.
+- Xuất bản sao lưu.
+- Nhập bản sao lưu.
+- Khôi phục dự án.
+- Xóa dự án có xác nhận phù hợp.
+
+Không làm mất dữ liệu khi tải lại trang hoặc cập nhật phiên bản ứng dụng.
+
+Thiết kế cơ chế nâng cấp phiên bản cơ sở dữ liệu an toàn.
+
+## XIX. HƯỚNG DẪN SỬ DỤNG
+
+Tạo trang hướng dẫn riêng, truy cập dễ dàng từ menu chính.
+
+Mỗi phân hệ phải có hướng dẫn:
+
+- Chức năng dùng để làm gì.
+- Cách nhập dữ liệu.
+- Cách thao tác.
+- Ví dụ thực hành.
+- Cách chỉnh sửa.
+- Cách lưu.
+- Cách xuất Word hoặc hình ảnh.
+- Cách xử lý lỗi thường gặp.
+
+Sử dụng tiếng Việt dễ hiểu, có hình minh họa hoặc giao diện thao tác thực tế khi phù hợp.
+
+Không dùng nội dung hướng dẫn kỹ thuật dành cho lập trình viên để thay thế hướng dẫn giáo viên.
+
+## XX. YÊU CẦU KIỂM THỬ
+
+Trước khi bàn giao từng phân hệ, phải kiểm tra:
+
+- Tất cả nút chức năng đã kết nối xử lý thực tế.
+- Không có lỗi JavaScript.
+- Không có lỗi TypeScript.
+- Không có lỗi undefined, NaN.
+- Không có đường dẫn hình ảnh bị lỗi.
+- Không có menu bị tràn.
+- Không có nội dung bị cắt.
+- Không có nội dung placeholder trong chức năng đã hoàn thiện.
+- Công thức hiển thị đúng.
+- Hình vẽ kéo thả, xoay và đổi kích thước được.
+- Dự án lưu và mở lại chính xác.
+- DOCX tạo ra có cấu trúc hợp lệ.
+- Công thức OMML được hỗ trợ có thể chỉnh sửa trong Word.
+- Đáp án sau khi trộn đề khớp mã đề.
+- PDF và PNG không bị cắt nội dung.
+- Dữ liệu không bị mất khi tải lại.
+- Build production thành công.
+
+Kiểm tra bằng dữ liệu thực tế, không chỉ kiểm tra sự xuất hiện của giao diện.
+
+Không tuyên bố đã kiểm thử trong Microsoft Word nếu môi trường hiện tại không có Microsoft Word.
+
+## XXI. NGUYÊN TẮC PHÁT TRIỂN VÀ NÂNG CẤP
+
+Khi cập nhật ứng dụng:
+
+- Đọc cấu trúc mã nguồn hiện tại trước khi sửa.
+- Giữ lại toàn bộ chức năng đã hoạt động.
+- Không tự ý thay đổi công nghệ nền tảng.
+- Không thay thế trang chủ bằng Dashboard.
+- Không xóa dữ liệu người dùng.
+- Không tạo lại dự án từ đầu khi chỉ cần sửa một module.
+- Không thay đổi các phần không liên quan.
+- Không tạo nút chức năng giả.
+- Không dùng dữ liệu mẫu thay cho dữ liệu nghiệp vụ cần thiết.
+- Không sử dụng dịch vụ bắt buộc trả phí.
+- Không để lộ khóa API hoặc thông tin bảo mật ở mã nguồn frontend.
+
+Phải bảo toàn các thay đổi đã thực hiện trực tiếp trên GitHub khi tiếp tục nâng cấp cùng phiên bản mã nguồn.
+
+## XXII. LỘ TRÌNH TRIỂN KHAI
+
+### Giai đoạn 1
+
+Hoàn thiện:
+
+- Trang chủ và hệ thống điều hướng.
+- Trình soạn thảo công thức Toán, Lý, Hóa.
+- Thư viện công thức thực tế.
+- Chỉnh sửa trực tiếp bằng MathLive.
+- Hiển thị công thức đúng.
+- Xuất công thức OMML cho các dạng được hỗ trợ.
+- Bảng vẽ kéo thả.
+- Thư viện SVG Toán, Lý, Hóa.
+- Chỉnh sửa thuộc tính đối tượng.
+- Xuất SVG, PNG.
+- Lưu và mở dự án.
+- Hướng dẫn sử dụng.
+
+### Giai đoạn 2
+
+Hoàn thiện đồ thị, bảng biến thiên và hình học không gian 3D.
+
+### Giai đoạn 3
+
+Hoàn thiện trình soạn đề, ngân hàng câu hỏi, ma trận và bản đặc tả.
+
+### Giai đoạn 4
+
+Hoàn thiện trộn đề, phiếu OMR và xuất dữ liệu chấm thi.
+
+### Giai đoạn 5
+
+Hoàn thiện xử lý DOCX, OCR, trình chiếu và Word Add-in.
+
+Tích hợp K12Online chỉ thực hiện sau khi xác minh được định dạng nhập liệu hoặc giao diện tích hợp được hỗ trợ.
+
+## XXIII. LỆNH THỰC THI NGAY
+
+Bắt đầu trực tiếp xây dựng SMART DOCX PRO.
+
+Thiết lập kiến trúc mở rộng cho toàn bộ hệ thống nhưng tập trung hoàn thiện chức năng thực tế của Giai đoạn 1 trong lần triển khai đầu tiên.
+
+Không dành quá nhiều tài nguyên cho các phân hệ chưa triển khai.
+
+Không tạo hàng loạt giao diện rỗng hoặc nút chỉ hiển thị thông báo.
+
+Chỉ đưa những phân hệ đã có chức năng thực tế vào khu vực làm việc của người dùng.
+
+Ưu tiên tuyệt đối:
+
+1. Công thức hiển thị chính xác.
+2. Công thức chỉnh sửa trực tiếp được.
+3. Xuất Word dạng OMML thật.
+4. Hình vẽ khoa học đẹp và chính xác.
+5. Kéo thả, xoay, đổi kích thước thực sự hoạt động.
+6. Lưu dự án an toàn.
+7. Giao diện khoa học, dễ sử dụng.
+8. Build thành công trên Vercel.
+
+Hãy tạo và chỉnh sửa mã nguồn trực tiếp trong môi trường Build.
+
+Không chỉ trả về kế hoạch, báo cáo, đoạn code minh họa hoặc bản mô tả ứng dụng.
+
+Bắt đầu triển khai ngay.
