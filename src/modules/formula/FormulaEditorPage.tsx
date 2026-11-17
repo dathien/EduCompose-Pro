@@ -27,6 +27,8 @@ import {
   RecentFormulaEntry,
   SubjectType,
 } from '../../types';
+import { ACCENT_ITEMS } from '../../components/editor/mathToolbarCatalog';
+import { insertScientificMath, isAccentRemoval } from '../../components/editor/accentCommands';
 import { BUILTIN_FORMULAS, SYMBOL_GROUPS } from '../../data/formulas';
 import { KatexRenderer } from '../../components/KatexRenderer';
 import { convertMathmlToOmml } from '../../core/omml/mathmlToOmml';
@@ -76,6 +78,8 @@ const COLOR_PRESETS = [
   { label: 'Đỏ nhấn', value: '#dc2626' },
   { label: 'Tím học thuật', value: '#7c3aed' },
 ];
+
+const ALL_SYMBOL_GROUPS = [...SYMBOL_GROUPS, { id: 'accents', name: 'Dấu trên và dấu dưới', items: ACCENT_ITEMS.map(item => ({ label: item.previewLatex, latex: item.insertLatex, title: item.tooltip })) }];
 
 const FORMULA_SIZE_OPTIONS = [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48];
 
@@ -256,7 +260,7 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
       setTimeout(() => {
         const mf = mathfieldRef.current;
         if (mf) {
-          mf.insert(snippet, { focus: true, feedback: false });
+          if (!insertScientificMath(mf, snippet)) { onNotify('Hãy chọn cả biểu thức có dấu cần bỏ.', 'info'); return; }
           setLatex(mf.value);
         }
       }, 40);
@@ -264,9 +268,9 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
     }
     const mf = mathfieldRef.current;
     if (mf) {
-      mf.insert(snippet, { focus: true, feedback: false });
+      if (!insertScientificMath(mf, snippet)) { onNotify('Hãy chọn cả biểu thức có dấu cần bỏ.', 'info'); return; }
       setLatex(mf.value);
-    } else {
+    } else if (!isAccentRemoval(snippet)) {
       setLatexAndSyncField(`${latex} ${snippet}`.trim());
     }
   };
@@ -506,7 +510,7 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
     }
   };
 
-  const activeGroup = SYMBOL_GROUPS.find((g) => g.id === activeSymbolGroupId) || SYMBOL_GROUPS[0];
+  const activeGroup = ALL_SYMBOL_GROUPS.find((g) => g.id === activeSymbolGroupId) || SYMBOL_GROUPS[0];
   const isCurrentFavorite = favoriteIds.includes(activeFormulaId);
 
   return (
@@ -851,7 +855,7 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
           {/* THANH CÔNG CỤ TOÁN HỌC (>= 38x38px nút, ký hiệu 18-22px, tự xuống dòng) */}
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-3">
             <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2.5">
-              {SYMBOL_GROUPS.map((group) => (
+              {ALL_SYMBOL_GROUPS.map((group) => (
                 <button
                   key={group.id}
                   type="button"
@@ -875,6 +879,8 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
                     key={btn.label + btn.latex}
                     type="button"
                     title={btn.title}
+                    aria-label={btn.title}
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => handleInsertSymbol(btn.latex)}
                     className={`min-w-[42px] min-h-[40px] px-2.5 py-1.5 text-[20px] leading-none font-medium rounded-lg border transition-colors flex items-center justify-center ${
                       isLastActive
@@ -882,11 +888,12 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
                         : 'bg-white border-slate-200 text-slate-900 hover:border-sky-500 hover:bg-sky-50 hover:text-sky-800'
                     }`}
                   >
-                    {btn.label}
+                    {activeSymbolGroupId === 'accents' ? <KatexRenderer latex={btn.latex === '@remove-above' ? '\\overline{P}\\to P' : btn.latex === '@remove-below' ? '\\underline{AB}\\to AB' : btn.label} /> : btn.label}
                   </button>
                 );
               })}
             </div>
+            {activeSymbolGroupId === 'accents' && <p className="text-sm text-slate-600">Bôi đen ký tự để thêm dấu; chọn cả biểu thức có dấu để đổi hoặc bỏ dấu.</p>}
           </div>
 
           {/* Input Mode Switcher + Editor & Preview Font Controls */}
