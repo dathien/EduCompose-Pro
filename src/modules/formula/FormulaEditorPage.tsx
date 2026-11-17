@@ -898,28 +898,13 @@ export const FormulaEditorPage: React.FC<FormulaEditorPageProps> = ({
 
           {/* Input Mode Switcher + Editor & Preview Font Controls */}
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-1 p-1 bg-slate-100 rounded-lg">
-              {(
-                [
-                  ['visual', 'Trực quan (MathLive)'],
-                  ['latex', 'LaTeX'],
-                  ['mathml', 'MathML'],
-                  ['typst', 'Typst'],
-                ] as [InputMode, string][]
-              ).map(([modeKey, label]) => (
-                <button
-                  key={modeKey}
-                  type="button"
-                  onClick={() => handleSwitchMode(modeKey)}
-                  className={`px-3 py-1.5 min-h-[36px] ui-btn font-medium rounded-md transition-colors whitespace-nowrap ${
-                    inputMode === modeKey
-                      ? 'bg-white text-sky-700 shadow-xs font-semibold'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+            <div className="flex flex-wrap items-center gap-2">
+              <button type="button" onClick={() => handleSwitchMode('visual')} className={`px-3 py-2 rounded-lg border ui-btn ${inputMode === 'visual' ? 'bg-sky-50 border-sky-400 text-sky-700 font-semibold' : 'bg-white border-slate-200'}`}>Soạn trực quan</button>
+              <label className="ui-guide flex items-center gap-2">Nâng cao
+                <select aria-label="Chế độ soạn nâng cao" value={inputMode === 'visual' ? '' : inputMode} onChange={e => handleSwitchMode((e.target.value || 'visual') as InputMode)} className="border border-slate-200 rounded-lg p-2 bg-white">
+                  <option value="">Chọn định dạng</option><option value="latex">LaTeX</option><option value="mathml">MathML</option><option value="typst">Typst</option>
+                </select>
+              </label>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
