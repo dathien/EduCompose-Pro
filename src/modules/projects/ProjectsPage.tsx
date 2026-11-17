@@ -8,7 +8,6 @@ import {
   FileText,
   FolderOpen,
   Search,
-  SlidersHorizontal,
   Star,
   Trash2,
   Upload,
@@ -21,7 +20,6 @@ import {
   OmrTemplateConfig,
   WordDocumentRecord,
 } from '../../types';
-import { UiFontSizeOption } from '../../App';
 import {
   deleteDrawingProject,
   deleteExamPaper,
@@ -52,8 +50,6 @@ import {
 } from '../../utils/vietnamese';
 
 interface ProjectsPageProps {
-  uiFontSize: UiFontSizeOption;
-  onChangeUiFontSize: (size: UiFontSizeOption) => void;
   onOpenFormula: (formula: FormulaItem) => void;
   onOpenDrawing: (project: DrawingProject) => void;
   onOpenWordDocument: (doc: WordDocumentRecord) => void;
@@ -64,15 +60,7 @@ interface ProjectsPageProps {
 
 type ProjectSectionTab = 'drawings' | 'formulas' | 'documents' | 'omr' | 'exams';
 
-const UI_FONT_OPTIONS: { value: UiFontSizeOption; label: string; sizeText: string }[] = [
-  { value: 15, label: 'Tiêu chuẩn', sizeText: '15px' },
-  { value: 16, label: 'Dễ đọc', sizeText: '16px' },
-  { value: 18, label: 'Chữ lớn', sizeText: '18px' },
-];
-
 export const ProjectsPage: React.FC<ProjectsPageProps> = ({
-  uiFontSize,
-  onChangeUiFontSize,
   onOpenFormula,
   onOpenDrawing,
   onOpenWordDocument,
@@ -217,7 +205,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
         <div>
           <h1 className="ui-page-title text-slate-900">Dự án & Kho lưu trữ cá nhân</h1>
           <p className="ui-body text-slate-600 mt-1.5">
-            Toàn bộ dữ liệu được lưu ngay trên trình duyệt (IndexedDB). Hãy xuất sao lưu JSON định kì khi chuyển sang máy tính khác.
+            Dữ liệu được lưu trên trình duyệt này. Hãy sao lưu định kỳ và trước khi chuyển sang máy tính khác.
           </p>
         </div>
 
@@ -243,46 +231,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({
             className="inline-flex items-center gap-2 px-4 min-h-[40px] ui-btn font-semibold bg-sky-600 text-white rounded-lg hover:bg-sky-700 whitespace-nowrap"
           >
             <Download className="w-4 h-4" />
-            <span>Xuất bản sao lưu (.json)</span>
+            <span>Xuất bản sao lưu</span>
           </button>
         </div>
       </div>
-
-      {/* Cài đặt hiển thị – Cỡ chữ giao diện */}
-      <section className="bg-white border border-slate-200 rounded-xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 ui-section-title text-slate-900">
-            <SlidersHorizontal className="w-4 h-4 text-sky-600 shrink-0" />
-            <span>Cài đặt hiển thị – Cỡ chữ giao diện</span>
-          </div>
-          <p className="ui-guide text-slate-600">
-            Lựa chọn được lưu tự động. Tài liệu Word (.docx) xuất ra vẫn luôn giữ định dạng chuẩn Times New Roman 13pt trên khổ A4.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          {UI_FONT_OPTIONS.map((opt) => {
-            const active = uiFontSize === opt.value;
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => {
-                  onChangeUiFontSize(opt.value);
-                  onNotify(`Đã chuyển cỡ chữ giao diện sang ${opt.label} (${opt.sizeText}).`, 'info');
-                }}
-                className={`min-h-[40px] px-4 py-2 rounded-lg border ui-btn transition-colors whitespace-nowrap ${
-                  active
-                    ? 'bg-sky-600 text-white border-sky-600 font-semibold'
-                    : 'bg-slate-50 text-slate-800 border-slate-200 hover:bg-slate-100 font-medium'
-                }`}
-              >
-                {opt.label} ({opt.sizeText})
-              </button>
-            );
-          })}
-        </div>
-      </section>
 
       {/* Filter & Tabs Bar */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
