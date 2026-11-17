@@ -256,9 +256,10 @@ export const OmrStudioPage: React.FC<OmrStudioPageProps> = ({ onNotify }) => {
                     <div className="flex items-start justify-between gap-2">
                       <div className="ui-btn font-semibold text-slate-900 leading-snug">{tpl.name}</div>
                       <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-[13px] font-medium shrink-0">
-                        {tpl.structureLabel}
+                        {tpl.pages} trang
                       </span>
                     </div>
+                    <p className="ui-guide text-slate-700 mt-2">{[tpl.mcqCount && `${tpl.mcqCount} câu trắc nghiệm`, tpl.tfCount && `${tpl.tfCount} câu đúng/sai`, tpl.shortCount && `${tpl.shortCount} câu trả lời ngắn`, tpl.hasEssaySection && "Có tự luận"].filter(Boolean).join(" · ")}</p>
                     <div className="ui-caption text-slate-500 mt-1 flex items-center justify-between gap-2">
                       <span>{OMR_PAPER_DIMENSIONS_MM[tpl.paperPreset].label.split('(')[0].trim()}</span>
                       {filterMode === 'saved' && (
