@@ -233,8 +233,7 @@ export default function App() {
                   const result = await pwa.triggerInstall();
                   if (result === 'accepted') notify('Đã cài đặt ứng dụng.', 'success');
                   if (result === 'unavailable') {
-                    handleNavigate('home');
-                    notify('Chọn Cài đặt ứng dụng tại Trang chủ để xem hướng dẫn cài đặt.', 'info');
+                    notify(pwa.isIOS ? 'Trong Safari, chọn Chia sẻ → Thêm vào Màn hình chính.' : 'Trong Chrome hoặc Edge, mở menu trình duyệt và chọn Cài đặt ứng dụng nếu khả dụng.', 'info');
                   }
                 }}
                 aria-label="Cài đặt App"
