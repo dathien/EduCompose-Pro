@@ -157,7 +157,7 @@ export const BeautifyDocxPage: React.FC<BeautifyDocxPageProps> = ({
             <h1 className="ui-page-title text-slate-900">Làm đẹp & Chuẩn hóa Đề thi Word (.docx)</h1>
           </div>
           <p className="ui-body text-slate-600">
-            Xử lí trực tiếp cấu trúc XML của file Word thật: chuẩn hóa Times New Roman 13pt khổ A4, khử lỗi Auto-Number, làm sạch khoảng trắng và bảo toàn 100% công thức OMML, hình ảnh, bảng biểu, header/footer.
+            Chọn đề Word, chỉnh định dạng, xem lại nội dung và tải bản mới. Tài liệu gốc không bị ghi đè.
           </p>
         </div>
 
@@ -219,7 +219,7 @@ export const BeautifyDocxPage: React.FC<BeautifyDocxPageProps> = ({
               <FileUp className="w-7 h-7 text-sky-600" />
               <div className="ui-group-title text-slate-900">Tải file .docx bất kì từ máy tính</div>
               <p className="ui-caption text-slate-600">
-                Phân tích DOM XML cục bộ trên trình duyệt, không gửi tài liệu lên máy chủ ngoài.
+                Chọn một tài liệu Word trên máy tính để chỉnh sửa.
               </p>
             </button>
 
@@ -245,7 +245,7 @@ export const BeautifyDocxPage: React.FC<BeautifyDocxPageProps> = ({
               <Wand2 className="w-7 h-7 text-sky-600" />
               <div className="ui-group-title text-slate-900">Thử với Đề 15 phút có OMML</div>
               <p className="ui-caption text-slate-600">
-                Kiểm tra khả năng giữ nguyên công thức Toán OMML khi định dạng và đánh số lại câu hỏi.
+                Thực hành định dạng và đánh số câu hỏi có công thức Toán.
               </p>
             </button>
           </div>
@@ -259,7 +259,7 @@ export const BeautifyDocxPage: React.FC<BeautifyDocxPageProps> = ({
           <aside className="xl:col-span-5 space-y-4">
             {/* Diagnostics */}
             <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
-              <div className="ui-group-title text-slate-900">Thông số cấu trúc OOXML hiện tại</div>
+              <div className="ui-group-title text-slate-900">Kiểm tra nội dung tài liệu</div>
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-100">
                   <div className="text-[18px] font-bold text-slate-900 tabular-nums">{inspection.paragraphCount}</div>
@@ -267,7 +267,7 @@ export const BeautifyDocxPage: React.FC<BeautifyDocxPageProps> = ({
                 </div>
                 <div className="p-2.5 bg-sky-50 rounded-lg border border-sky-100">
                   <div className="text-[18px] font-bold text-sky-700 tabular-nums">{inspection.ommlCount}</div>
-                  <div className="ui-caption text-sky-800">Công thức OMML</div>
+                  <div className="ui-caption text-sky-800">Công thức</div>
                 </div>
                 <div className="p-2.5 bg-teal-50 rounded-lg border border-teal-100">
                   <div className="text-[18px] font-bold text-teal-700 tabular-nums">{inspection.imageCount}</div>
@@ -275,9 +275,9 @@ export const BeautifyDocxPage: React.FC<BeautifyDocxPageProps> = ({
                 </div>
               </div>
               <div className="ui-caption text-slate-600 flex flex-wrap gap-3 pt-1">
-                <span>Bảng (&lt;w:tbl&gt;): <strong>{inspection.tableCount}</strong></span>
-                <span>Header/Footer: <strong>{inspection.headerCount}/{inspection.footerCount}</strong></span>
-                <span>Auto-Number: <strong className={inspection.autoNumberCount > 0 ? 'text-amber-700' : ''}>{inspection.autoNumberCount}</strong></span>
+                <span>Bảng biểu: <strong>{inspection.tableCount}</strong></span>
+                <span>Đầu trang / chân trang: <strong>{inspection.headerCount}/{inspection.footerCount}</strong></span>
+                <span>Đánh số tự động: <strong className={inspection.autoNumberCount > 0 ? 'text-amber-700' : ''}>{inspection.autoNumberCount}</strong></span>
               </div>
 
               {inspection.issues.length > 0 ? (
