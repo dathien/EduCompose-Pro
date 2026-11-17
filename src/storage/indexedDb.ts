@@ -329,7 +329,7 @@ export async function importDataBackup(payload: AppBackupPayload): Promise<{
   exams: number;
 }> {
   if (!payload || payload.app !== 'SMART DOCX PRO') {
-    throw new Error('Tệp sao lưu không đúng định dạng của SMART DOCX PRO.');
+    throw new Error('Tệp sao lưu không đúng định dạng của EduCompose Pro.');
   }
 
   let formulaCount = 0;
