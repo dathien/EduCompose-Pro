@@ -391,8 +391,8 @@ export const HomePage: React.FC<HomePageProps> = ({
     action: () => void;
   }[] = [
     {
-      title: 'Trình soạn công thức',
-      desc: 'Soạn công thức Toán, Vật lí, Hóa học chuẩn OMML chỉnh sửa trực tiếp trong Word.',
+      title: 'Soạn công thức',
+      desc: 'Nhập công thức Toán, Vật lí, Hóa học trực quan và xuất Word.',
       icon: <Sigma className="w-6 h-6 text-sky-600" />,
       accent: 'hover:border-sky-400',
       action: () => onNavigate('formula'),
@@ -419,7 +419,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       action: () => onNavigate('drawing', { drawingMode: 'chart' }),
     },
     {
-      title: 'Thiết kế phiếu OMR',
+      title: 'Tạo phiếu trả lời trắc nghiệm',
       desc: 'Tạo phiếu tô trắc nghiệm A4, A5, A3, 2×A5 chuẩn tọa độ mm, xuất PDF/PNG/SVG/JSON.',
       icon: <ClipboardCheck className="w-6 h-6 text-sky-600" />,
       accent: 'hover:border-sky-400',
@@ -447,7 +447,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       action: () => onNavigate('beautify'),
     },
     {
-      title: 'Công cụ Word chuyên sâu',
+      title: 'Xử lý tài liệu Word',
       desc: 'Chuẩn hóa đánh số, xử lý bảng/biểu mẫu, kiểm tra đề lỗi và làm sạch văn bản.',
       icon: <Wand2 className="w-6 h-6 text-sky-600" />,
       accent: 'hover:border-sky-400',
@@ -496,7 +496,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 Bộ công cụ biên soạn học liệu và đề thi
               </p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-0.5 text-[15px] text-slate-600">
-                <span>Cài đặt trên máy tính từ thanh menu.</span>
+                <span>Cài đặt ứng dụng trên máy tính từ thanh menu; các công cụ đã tải có thể sử dụng ngoại tuyến.</span>
                 {pwa?.offlineVerified && (
                   <span className="inline-flex items-center gap-1.5 text-[14px] font-medium text-emerald-700">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -524,7 +524,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             onChange={handleOpenWordFile}
             className="hidden"
           />
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
+          <div className="flex flex-wrap gap-3">
             <button
               type="button"
               onClick={() => {
@@ -546,41 +546,6 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span>Mở tài liệu Word</span>
             </button>
 
-            <button
-              type="button"
-              onClick={() => onNavigate('formula')}
-              className="inline-flex items-center justify-center gap-2 px-3 min-h-[46px] bg-teal-50 border border-teal-200 text-teal-800 text-[14px] sm:text-[15px] font-medium rounded-xl hover:bg-teal-100 transition-colors text-center"
-            >
-              <Sigma className="w-4 h-4 shrink-0" />
-              <span>Soạn công thức</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onNavigate('drawing', { drawingMode: 'canvas' })}
-              className="inline-flex items-center justify-center gap-2 px-3 min-h-[46px] bg-slate-50 border border-slate-200 text-slate-800 text-[14px] sm:text-[15px] font-medium rounded-xl hover:bg-slate-100 transition-colors text-center"
-            >
-              <Compass className="w-4 h-4 text-sky-600 shrink-0" />
-              <span>Mở bảng vẽ</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onNavigate('exam')}
-              className="inline-flex items-center justify-center gap-2 px-3 min-h-[46px] bg-slate-50 border border-slate-200 text-slate-800 text-[14px] sm:text-[15px] font-medium rounded-xl hover:bg-slate-100 transition-colors text-center"
-            >
-              <FileCheck2 className="w-4 h-4 text-teal-600 shrink-0" />
-              <span>Tạo đề kiểm tra</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onNavigate('omr')}
-              className="inline-flex items-center justify-center gap-2 px-3 min-h-[46px] bg-slate-50 border border-slate-200 text-slate-800 text-[14px] sm:text-[15px] font-medium rounded-xl hover:bg-slate-100 transition-colors text-center"
-            >
-              <ClipboardCheck className="w-4 h-4 text-sky-600 shrink-0" />
-              <span>Tạo phiếu OMR</span>
-            </button>
           </div>
         </div>
 
@@ -719,8 +684,8 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       {/* 2. PHÂN HỆ LÀM VIỆC CHÍNH (DUY NHẤT - 12 MODULE) */}
       <section className="space-y-3.5">
-        <h2 className="ui-section-title text-slate-900">Phân hệ làm việc chính</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <h2 className="ui-section-title text-slate-900">Thầy cô muốn thực hiện công việc nào?</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {moduleCards.map((card) => (
             <button
               key={card.title}
