@@ -295,3 +295,7 @@ math-field.inline-math-node-field {
   }
 }
 
+
+/* Readable controls and keyboard focus, without changing document typography. */
+.no-print button:focus-visible, main button:focus-visible, main select:focus-visible, main input:focus-visible, main textarea:focus-visible { outline: 2px solid #0284c7; outline-offset: 3px; }
+main input[type="checkbox"], main input[type="radio"] { width: 17px; height: 17px; flex-shrink: 0; accent-color: #0284c7; }

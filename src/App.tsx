@@ -2,7 +2,6 @@ import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 
 import {
   AlertTriangle,
   CheckCircle2,
-  FileDown,
   Info,
   Menu,
   RefreshCw,
@@ -27,8 +26,6 @@ import { ProjectsPage } from './modules/projects/ProjectsPage';
 import { GuidePage } from './modules/guide/GuidePage';
 import { SAMPLE_INITIAL_EXAM } from './data/samples/sampleQuestions';
 import { generateId } from './utils/vietnamese';
-import { exportDocumentBlocksToDocxBlob, tryLatexToOmml } from './core/docx/docxEngine';
-import { getActiveDocumentAdapter } from './adapters/wordAdapter';
 import {
   runRichTextMigrationIfNeeded,
   saveExamPaper,
@@ -73,18 +70,16 @@ interface ToastState {
   tone: 'info' | 'success' | 'warning';
 }
 
-const NAV_ITEMS: { key: AppTab; label: string }[] = [
-  { key: 'home', label: 'Trang chủ' },
-  { key: 'formula', label: 'Công thức' },
-  { key: 'drawing', label: 'Vẽ hình' },
-  { key: 'omr', label: 'Phiếu OMR' },
-  { key: 'exam', label: 'Soạn đề' },
-  { key: 'shuffle', label: 'Trộn đề' },
-  { key: 'beautify', label: 'Làm đẹp đề' },
-  { key: 'wordtools', label: 'Công cụ Word' },
-  { key: 'projects', label: 'Dự án' },
-  { key: 'guide', label: 'Hướng dẫn' },
+const NAV_GROUPS: { label: string; items: { key: AppTab; label: string }[] }[] = [
+  { label: 'Trang chủ', items: [{key:'home',label:'Trang chủ'}] },
+  { label: 'Công thức', items: [{key:'formula',label:'Công thức'}] },
+  { label: 'Vẽ hình', items: [{key:'drawing',label:'Vẽ hình'}] },
+  { label: 'Soạn đề', items: [{key:'exam',label:'Soạn đề và ma trận'},{key:'shuffle',label:'Trộn đề thi'},{key:'omr',label:'Phiếu trả lời trắc nghiệm'}] },
+  { label: 'Công cụ Word', items: [{key:'beautify',label:'Làm đẹp đề thi'},{key:'wordtools',label:'Xử lý tài liệu Word'}] },
+  { label: 'Dự án', items: [{key:'projects',label:'Dự án'}] },
+  { label: 'Hướng dẫn', items: [{key:'guide',label:'Hướng dẫn'}] },
 ];
+const NAV_ITEMS = NAV_GROUPS.flatMap(group => group.items);
 
 function ModuleLoadingFallback() {
   return (
@@ -96,6 +91,7 @@ function ModuleLoadingFallback() {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>('home');
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [selectedFormula, setSelectedFormula] = useState<FormulaItem | null>(null);
@@ -153,6 +149,7 @@ export default function App() {
       }
       setActiveTab(tab);
       setMobileMenuOpen(false);
+      setOpenGroup(null);
     },
     []
   );
@@ -167,20 +164,6 @@ export default function App() {
     }));
   }, []);
 
-  const handleQuickExportDocument = async () => {
-    const adapter = getActiveDocumentAdapter();
-    const blob = await exportDocumentBlocksToDocxBlob(
-      activeDocument.name,
-      activeDocument.blocks,
-      tryLatexToOmml
-    );
-    await saveWordDocument(activeDocument);
-    const res = await adapter.exportDocxFile(
-      blob,
-      `${activeDocument.name.replace(/\s+/g, '_') || 'tai_lieu'}.docx`
-    );
-    notify(res.message, 'success');
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900">
@@ -219,14 +202,6 @@ export default function App() {
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={handleQuickExportDocument}
-              className="inline-flex items-center gap-2 px-3.5 min-h-[40px] ui-btn font-semibold text-white bg-sky-600 rounded-lg hover:bg-sky-700 transition-colors whitespace-nowrap shrink-0"
-            >
-              <FileDown className="w-4 h-4" />
-              <span className="hidden sm:inline">Xuất Word</span>
-            </button>
 
             <button
               type="button"
@@ -245,23 +220,16 @@ export default function App() {
             aria-label="Điều hướng chính"
             className="hidden lg:flex flex-wrap items-center justify-start gap-x-4 xl:gap-x-5 gap-y-0 text-[15px] font-medium max-w-[1560px] mx-auto px-4 sm:px-6 border-t border-slate-100"
           >
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeTab === item.key;
-              return (
-                <button
-                  key={item.key}
-                  type="button"
-                  onClick={() => handleNavigate(item.key)}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={`py-2.5 border-b-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    isActive
-                      ? 'border-sky-600 text-sky-700 font-semibold'
-                      : 'border-transparent text-slate-600 hover:text-slate-900 hover:border-slate-300'
-                  }`}
-                >
-                  {item.label}
+            {NAV_GROUPS.map(group => {
+              const current = group.items.some(item => item.key === activeTab);
+              return <div key={group.label} className="relative" onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget)) setOpenGroup(null); }} onKeyDown={e => { if(e.key === 'Escape') { setOpenGroup(null); (e.currentTarget.firstElementChild as HTMLButtonElement)?.focus(); } }}>
+                <button type="button" aria-current={current ? 'page' : undefined} aria-expanded={group.items.length > 1 ? openGroup === group.label : undefined} onClick={() => group.items.length === 1 ? handleNavigate(group.items[0].key) : setOpenGroup(v => v === group.label ? null : group.label)} className={`py-3 border-b-2 whitespace-nowrap ${current ? 'border-sky-600 text-sky-700 font-semibold' : 'border-transparent text-slate-700 hover:text-sky-700'}`}>
+                  {group.label}{group.items.length > 1 && <span aria-hidden="true"> ▾</span>}
                 </button>
-              );
+                {group.items.length > 1 && openGroup === group.label && <div className="absolute top-full left-0 min-w-[250px] bg-white border border-slate-200 rounded-lg shadow-lg p-1 z-50">
+                  {group.items.map(item => <button key={item.key} type="button" onClick={() => handleNavigate(item.key)} className={`block w-full text-left px-3 py-3 rounded-md hover:bg-sky-50 ${activeTab === item.key ? 'text-sky-700 font-semibold bg-sky-50' : 'text-slate-700'}`}>{item.label}</button>)}
+                </div>}
+              </div>;
             })}
           </nav>
 
