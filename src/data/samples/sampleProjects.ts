@@ -913,11 +913,11 @@ export function drawingSubject(category: DrawingElement['category'], kind = ''):
   return 'chung';
 }
 export function inferDrawingSubject(project: DrawingProject): string {
-  if (project.subject && project.subject !== 'chung') return project.subject;
+  if (project.subject && ['toan','vat_li','hoa_hoc'].includes(project.subject)) return project.subject;
   const counts: Record<string, number> = {};
   for (const el of project.elements) {
     const subject = drawingSubject(el.category, el.kind);
-    if (subject !== 'chung') counts[subject] = (counts[subject] || 0) + 1;
+    if (['toan','vat_li','hoa_hoc'].includes(subject)) counts[subject] = (counts[subject] || 0) + 1;
   }
   return Object.keys(counts).sort((a,b) => counts[b] - counts[a])[0] || 'all';
 }
@@ -936,7 +936,7 @@ const assemblyProjects: SampleDrawingProject[] = DRAWING_TEMPLATES.map(tpl => {
   return {...base,id:`assembly_${tpl.id}`, name:tpl.name, description:tpl.description, subject:subject === ('all' as string) ? 'chung' : subject,
     topic:'Hình lắp ghép',elements};
 });
-export const EXPANDED_DRAWING_PROJECTS = [...SAMPLE_DRAWING_PROJECTS,...assemblyProjects,...objectProjects];
+export const EXPANDED_DRAWING_PROJECTS = [...SAMPLE_DRAWING_PROJECTS,...assemblyProjects,...objectProjects].filter(s => ['toan','vat_li','hoa_hoc'].includes(s.subject));
 
 export function cloneSampleAsUserProject(sample: SampleDrawingProject): DrawingProject {
   const now = Date.now();
