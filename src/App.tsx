@@ -96,7 +96,7 @@ export default function App() {
 
   const [selectedFormula, setSelectedFormula] = useState<FormulaItem | null>(null);
   const [selectedDrawing, setSelectedDrawing] = useState<DrawingProject | null>(null);
-  const [drawingStudioMode, setDrawingStudioMode] = useState<DrawingStudioMode>('canvas');
+  const [drawingStudioMode, setDrawingStudioMode] = useState<DrawingStudioMode>('gallery');
   const [wordToolsMode, setWordToolsMode] = useState<WordToolsMode>('format');
 
   const [activeDocument, setActiveDocument] = useState<WordDocumentRecord>(() =>
@@ -140,9 +140,11 @@ export default function App() {
   const handleNavigate = useCallback(
     (tab: AppTab, opts?: { drawingMode?: DrawingStudioMode; wordMode?: WordToolsMode }) => {
       if (opts?.drawingMode) {
+        setSelectedDrawing(null);
         setDrawingStudioMode(opts.drawingMode);
       } else if (tab === 'drawing') {
-        setDrawingStudioMode('canvas');
+        setSelectedDrawing(null);
+        setDrawingStudioMode('gallery');
       }
       if (opts?.wordMode) {
         setWordToolsMode(opts.wordMode);
