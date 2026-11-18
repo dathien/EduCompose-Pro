@@ -1,3 +1,4 @@
+import { DRAWING_LIBRARY_ITEMS, DRAWING_TEMPLATES, DRAWING_CATEGORY_LABELS } from '../drawing/drawingCatalog';
 import { DrawingElement, DrawingProject, SampleDrawingProject } from '../../types';
 import {
   buildFunctionGraphSvgInner,
@@ -901,6 +902,41 @@ export const SAMPLE_DRAWING_PROJECTS: SampleDrawingProject[] = [
     ],
   },
 ];
+
+// Build editable library projects from real vector objects, not placeholder images.
+export function drawingSubject(category: DrawingElement['category'], kind = ''): SampleDrawingProject['subject'] {
+  if (category.startsWith('toan_')) return 'toan';
+  if (category.startsWith('ly_')) return 'vat_li';
+  if (category.startsWith('hoa_')) return 'hoa_hoc';
+  if (kind.startsWith('bio_')) return 'sinh_hoc';
+  if (kind.startsWith('it_')) return 'tin_hoc';
+  return 'chung';
+}
+export function inferDrawingSubject(project: DrawingProject): string {
+  if (project.subject && project.subject !== 'chung') return project.subject;
+  const counts: Record<string, number> = {};
+  for (const el of project.elements) {
+    const subject = drawingSubject(el.category, el.kind);
+    if (subject !== 'chung') counts[subject] = (counts[subject] || 0) + 1;
+  }
+  return Object.keys(counts).sort((a,b) => counts[b] - counts[a])[0] || 'all';
+}
+const base = { isSample: true as const, grade: 'chung' as const, pagePreset: 'RATIO_4_3' as const,
+  widthCm: 16, heightCm: 12, showGrid: true, snapToGrid: true, createdAt: 0, updatedAt: 0 };
+const objectProjects: SampleDrawingProject[] = DRAWING_LIBRARY_ITEMS.map(item => ({
+  ...base, id: `library_${item.kind}`, name: item.name, description: 'Đối tượng vector có thể chỉnh sửa trực tiếp.',
+  subject: drawingSubject(item.category, item.kind), topic: DRAWING_CATEGORY_LABELS.find(c => c.id === item.category)?.label || 'Dùng chung',
+  elements: [makeEl(`library_${item.kind}_1`, 1, {kind: item.kind, name: item.name, category: item.category,
+    x: 302, y: 226, width: item.defaultWidth, height: item.defaultHeight, rotation: 0,
+    fill: item.defaultFill, stroke: item.defaultStroke, strokeWidth: 1.8, strokeDash: 'solid', params: {...item.defaultParams}})]
+}));
+const assemblyProjects: SampleDrawingProject[] = DRAWING_TEMPLATES.map(tpl => {
+  const elements = tpl.buildElements(302,226).map((el,i) => ({...el,id:`${tpl.id}_${i}`,zIndex:i+1}));
+  const subject = inferDrawingSubject({...base,id:tpl.id,name:tpl.name,elements}) as SampleDrawingProject['subject'];
+  return {...base,id:`assembly_${tpl.id}`, name:tpl.name, description:tpl.description, subject:subject === ('all' as string) ? 'chung' : subject,
+    topic:'Hình lắp ghép',elements};
+});
+export const EXPANDED_DRAWING_PROJECTS = [...SAMPLE_DRAWING_PROJECTS,...assemblyProjects,...objectProjects];
 
 export function cloneSampleAsUserProject(sample: SampleDrawingProject): DrawingProject {
   const now = Date.now();
