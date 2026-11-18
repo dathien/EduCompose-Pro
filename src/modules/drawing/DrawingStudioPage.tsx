@@ -724,7 +724,9 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
   // Filtered Library Items
   const filteredLibItems = useMemo(() => {
     return DRAWING_LIBRARY_ITEMS.filter((item) => {
-      if (libSubject !== 'all' && drawingSubject(item.category,item.kind) !== libSubject && item.category !== 'co_ban') return false;
+      const subject = drawingSubject(item.category,item.kind);
+      if (!['toan','vat_li','hoa_hoc'].includes(subject) && item.category !== 'co_ban') return false;
+      if (libSubject !== 'all' && subject !== libSubject && item.category !== 'co_ban') return false;
       if (libCategory !== 'all' && libCategory !== 'hinh_mau' && item.category !== libCategory) {
         return false;
       }
@@ -735,7 +737,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
 
   const filteredTemplates = useMemo(() => {
     if (libCategory !== 'all' && libCategory !== 'hinh_mau') return [];
-    return DRAWING_TEMPLATES.filter((t) => (libSubject === 'all' || t.buildElements(0,0).some(el => drawingSubject(el.category,el.kind) === libSubject)) && matchesVietnameseQuery(libSearch, [t.name, t.description]));
+    return DRAWING_TEMPLATES.filter((t) => (t.buildElements(0,0).every(el => ['toan','vat_li','hoa_hoc','chung'].includes(drawingSubject(el.category,el.kind))) && (libSubject === 'all' || t.buildElements(0,0).some(el => drawingSubject(el.category,el.kind) === libSubject))) && matchesVietnameseQuery(libSearch, [t.name, t.description]));
   }, [libCategory, libSearch, libSubject]);
 
   const sortedElements = useMemo(
@@ -955,7 +957,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
             </div>
             <div className="flex flex-wrap gap-1.5">
               {[
-                ['all', 'Tất cả'], ['toan', 'Toán học'], ['vat_li', 'Vật lí'], ['hoa_hoc', 'Hóa học'], ['sinh_hoc','Sinh học'], ['tin_hoc','Tin học'], ['chung','Dùng chung'],
+                ['all', 'Tất cả'], ['toan', 'Toán học'], ['vat_li', 'Vật lí'], ['hoa_hoc', 'Hóa học'],
               ].map(([sub, lbl]) => (
                 <button
                   key={sub}
@@ -979,7 +981,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
             <button className="bg-sky-600 text-white rounded-lg p-3" onClick={()=>{setProject(createEmptyProject());setSelectedIds([]);setHistory([]);setFuture([]);setStudioMode('canvas');}}>Tạo hình mới</button>
             <button className="border rounded-lg p-3" onClick={()=>jsonUploadRef.current?.click()}>Mở dự án từ tệp</button>
           </div>
-          <p className="ui-guide">{galleryResults.length} hình phù hợp · Mẫu dùng chung được hiển thị ở mọi khối lớp.</p>
+          <p className="ui-guide">{galleryResults.length} hình phù hợp · Mẫu không phân khối được hiển thị ở mọi khối lớp.</p>
           {galleryResults.length === 0 && <p>Không tìm thấy hình phù hợp. Hãy đổi từ khóa hoặc bộ lọc.</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {galleryResults.slice(0,galleryLimit).map((sample) => {
@@ -1791,7 +1793,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
               </div>
 
               <select aria-label="Môn học" value={libSubject} onChange={e=>{setLibSubject(e.target.value);setLibCategory('all');setLibSearch('');}} className="w-full border rounded-lg p-2 ui-input">
-                <option value="all">Tất cả môn</option><option value="toan">Toán học</option><option value="vat_li">Vật lí</option><option value="hoa_hoc">Hóa học</option><option value="sinh_hoc">Sinh học</option><option value="tin_hoc">Tin học</option><option value="chung">Dùng chung</option>
+                <option value="all">Tất cả môn</option><option value="toan">Toán học</option><option value="vat_li">Vật lí</option><option value="hoa_hoc">Hóa học</option>
               </select>
               <select
                 aria-label="Danh mục hình vẽ"
@@ -1799,7 +1801,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                 onChange={(e) => setLibCategory(e.target.value as DrawingCategory | 'all')}
                 className="w-full min-h-[40px] px-3 py-2 ui-input bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-sky-600"
               >
-                {DRAWING_CATEGORY_LABELS.filter(c=>libSubject==='all'||c.id==='all'||c.id==='hinh_mau'||c.id==='co_ban'||(libSubject==='toan'&&c.id.startsWith('toan_'))||(libSubject==='vat_li'&&c.id.startsWith('ly_'))||(libSubject==='hoa_hoc'&&c.id.startsWith('hoa_'))||(['sinh_hoc','tin_hoc'].includes(libSubject)&&c.id==='sinh_tin')).map((c) => (
+                {DRAWING_CATEGORY_LABELS.filter(c=>c.id!=='sinh_tin'&&(libSubject==='all'||c.id==='all'||c.id==='hinh_mau'||c.id==='co_ban'||(libSubject==='toan'&&c.id.startsWith('toan_'))||(libSubject==='vat_li'&&c.id.startsWith('ly_'))||(libSubject==='hoa_hoc'&&c.id.startsWith('hoa_')))).map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.label}
                   </option>
