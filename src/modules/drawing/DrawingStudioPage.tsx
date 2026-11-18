@@ -72,6 +72,8 @@ import {
   buildStatisticalChartSvgInner,
   buildVariationTableSvgInner,
 } from '../../core/math/graphEngine';
+import { DrawingFormulaEditor } from './DrawingFormulaEditor';
+import { formulaSvg } from './formulaSvg';
 import { SvgElementRenderer, getElementAnchors } from './SvgElementRenderer';
 import {
   PX_PER_CM,
@@ -492,7 +494,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
     const onKeyDown = (e: KeyboardEvent) => {
       if (studioMode !== 'canvas') return;
       const target = e.target as HTMLElement | null;
-      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
+      if (target && (['INPUT', 'TEXTAREA', 'SELECT', 'MATH-FIELD'].includes(target.tagName) || target.closest('[data-formula-editor]') || target.isContentEditable)) return;
 
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedIds.length > 0) {
         e.preventDefault();
@@ -1959,6 +1961,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                   <g
                     key={el.id}
                     className={el.locked ? 'cursor-not-allowed' : 'cursor-move'}
+                    onDoubleClick={(e) => { if (el.kind === 'basic_math') { e.stopPropagation(); setSelectedIds([el.id]); setRightOpen(true); requestAnimationFrame(() => { const editor = document.querySelector('[data-formula-editor]'); editor?.scrollIntoView({block:'nearest'}); (editor?.querySelector('math-field') as HTMLElement | null)?.focus(); }); } }}
                     onPointerDown={(e) => {
                       e.stopPropagation();
                       const pt = clientToCanvas(e.clientX, e.clientY);
@@ -2156,6 +2159,13 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                   )}
                 </div>
 
+                {primarySelected?.kind === 'basic_math' && (
+                  <DrawingFormulaEditor key={primarySelected.id} element={primarySelected} onApply={(latex, fontSize) => {
+                    const math = formulaSvg(latex);
+                    updateSelectedElements(el => ({ ...el, width: Math.max(el.width, math.width * fontSize / 1000 + 12), height: Math.max(el.height, math.height * fontSize / 1000 + 12), params: { ...el.params, latex, fontSize } }), true);
+                  }} />
+                )}
+
                 {/* Transform */}
                 {primarySelected && (
                   <div className="grid grid-cols-2 gap-2.5">
@@ -2324,23 +2334,6 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                             }))
                           }
                           className="w-full mt-1 min-h-[36px] px-2.5 py-1 ui-input border border-slate-200 rounded-lg"
-                        />
-                      </label>
-                    )}
-
-                    {primarySelected.kind === 'basic_math' && (
-                      <label className="block">
-                        <span className="ui-caption text-slate-600">Biểu thức LaTeX</span>
-                        <input
-                          type="text"
-                          value={primarySelected.params.latex || ''}
-                          onChange={(e) =>
-                            updateSelectedElements((el) => ({
-                              ...el,
-                              params: { ...el.params, latex: e.target.value },
-                            }))
-                          }
-                          className="w-full mt-1 min-h-[36px] px-2.5 py-1 ui-input font-mono-code border border-slate-200 rounded-lg"
                         />
                       </label>
                     )}

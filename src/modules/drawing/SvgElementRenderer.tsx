@@ -1,4 +1,5 @@
 import React from 'react';
+import { formulaSvg } from './formulaSvg';
 import { DrawingElement, StrokeDashStyle } from '../../types';
 
 export function getStrokeDashArray(style: StrokeDashStyle): string | undefined {
@@ -181,44 +182,17 @@ export const SvgElementRenderer: React.FC<RendererProps> = ({ element, uniqueSuf
 
       case 'basic_math': {
         const fs = params.fontSize ?? 16;
-        // Format common LaTeX snippets cleanly for SVG vector preview & safe PNG export
-        const displayStr = (params.latex || 'E = mc^2')
-          .replace(/\\vec\{([^{}]+)\}/g, '$1⃗')
-          .replace(/\\frac\{([^{}]+)\}\{([^{}]+)\}/g, '($1)/($2)')
-          .replace(/\\sqrt\{([^{}]+)\}/g, '√($1)')
-          .replace(/\\cdot/g, '·')
-          .replace(/\\times/g, '×')
-          .replace(/\\alpha/g, 'α')
-          .replace(/\\beta/g, 'β')
-          .replace(/\\pi/g, 'π')
-          .replace(/\\Delta/g, 'Δ')
-          .replace(/\\omega/g, 'ω')
-          .replace(/[{}]/g, '');
-        return (
-          <g>
-            <rect
-              x={1}
-              y={1}
-              width={Math.max(10, w - 2)}
-              height={Math.max(10, h - 2)}
-              rx={4}
-              fill={fill}
-              stroke={fill === 'transparent' ? 'none' : '#cbd5e1'}
-              strokeWidth={1}
-            />
-            <text
-              x={w / 2}
-              y={h / 2 + fs * 0.34}
-              textAnchor="middle"
-              fill={stroke}
-              fontSize={fs}
-              fontStyle="italic"
-              fontFamily="Times New Roman, serif"
-            >
-              {displayStr}
-            </text>
-          </g>
-        );
+        try {
+          const math = formulaSvg(params.latex || '');
+          const scale = Math.min(fs / 1000, (w - 4) / Math.max(1, math.width), (h - 4) / Math.max(1, math.height));
+          const mw = Math.max(1, math.width * scale), mh = Math.max(1, math.height * scale);
+          return <g color={stroke}>
+            <rect width={w} height={h} fill={fill} />
+            <svg x={(w-mw)/2} y={(h-mh)/2} width={mw} height={mh} viewBox={math.viewBox} color={stroke} dangerouslySetInnerHTML={{ __html: math.inner }} />
+          </g>;
+        } catch {
+          return <text x={w/2} y={h/2} textAnchor="middle" fill={stroke} fontSize={12}>Công thức chưa hợp lệ</text>;
+        }
       }
 
       case 'basic_rect':
