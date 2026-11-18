@@ -60,7 +60,7 @@ import {
   DRAWING_TEMPLATES,
   DrawingLibraryItem,
 } from '../../data/drawing/drawingCatalog';
-import { SAMPLE_DRAWING_PROJECTS, cloneSampleAsUserProject } from '../../data/samples/sampleProjects';
+import { EXPANDED_DRAWING_PROJECTS, cloneSampleAsUserProject, drawingSubject, inferDrawingSubject } from '../../data/samples/sampleProjects';
 import {
   GraphFunctionSpec,
   GraphPointSpec,
@@ -172,7 +172,8 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
 
   // Layout panels
   const [leftOpen, setLeftOpen] = useState(true);
-  const [rightOpen, setRightOpen] = useState(true);
+  const [rightOpen, setRightOpen] = useState(false);
+  useEffect(() => { setRightOpen(selectedIds.length > 0); }, [selectedIds]);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Library filters
@@ -181,6 +182,12 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
 
   // Gallery filter
   const [gallerySubject, setGallerySubject] = useState<string>('all');
+  const [gallerySearch, setGallerySearch] = useState('');
+  const [galleryGrade, setGalleryGrade] = useState('all');
+  const [libSubject, setLibSubject] = useState(() => inferDrawingSubject(project));
+  const [galleryLimit, setGalleryLimit] = useState(24);
+  useEffect(() => { setGalleryLimit(24); }, [gallerySubject, gallerySearch, galleryGrade]);
+  useEffect(() => { setLibSubject(inferDrawingSubject(project)); setLibCategory('all'); setLibSearch(''); }, [project.id, project.subject]);
 
   // Function Graph state
   const [graphFuncs, setGraphFuncs] = useState<GraphFunctionSpec[]>([
@@ -229,13 +236,14 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
   const adapter = useMemo(() => getActiveDocumentAdapter(), []);
 
   useEffect(() => {
-    setStudioMode(initialMode);
-  }, [initialMode]);
+    setStudioMode(initialProject ? 'canvas' : initialMode);
+  }, [initialMode, initialProject]);
 
   // Load external project when opened from Home or Projects
   useEffect(() => {
     if (initialProject) {
       setProject(initialProject);
+      setStudioMode('canvas');
       setSelectedIds([]);
       setHistory([]);
       setFuture([]);
@@ -702,6 +710,8 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
         throw new Error('Cấu trúc tệp dự án không hợp lệ.');
       }
       setProject({ ...parsed, updatedAt: Date.now() });
+      setStudioMode('canvas');
+      setHistory([]); setFuture([]);
       setSelectedIds([]);
       onNotify(`Đã mở dự án "${parsed.name}".`, 'success');
     } catch {
@@ -714,18 +724,19 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
   // Filtered Library Items
   const filteredLibItems = useMemo(() => {
     return DRAWING_LIBRARY_ITEMS.filter((item) => {
+      if (libSubject !== 'all' && drawingSubject(item.category,item.kind) !== libSubject && item.category !== 'co_ban') return false;
       if (libCategory !== 'all' && libCategory !== 'hinh_mau' && item.category !== libCategory) {
         return false;
       }
       if (libCategory === 'hinh_mau') return false;
       return matchesVietnameseQuery(libSearch, [item.name, item.kind]);
     });
-  }, [libCategory, libSearch]);
+  }, [libCategory, libSearch, libSubject]);
 
   const filteredTemplates = useMemo(() => {
     if (libCategory !== 'all' && libCategory !== 'hinh_mau') return [];
-    return DRAWING_TEMPLATES.filter((t) => matchesVietnameseQuery(libSearch, [t.name, t.description]));
-  }, [libCategory, libSearch]);
+    return DRAWING_TEMPLATES.filter((t) => (libSubject === 'all' || t.buildElements(0,0).some(el => drawingSubject(el.category,el.kind) === libSubject)) && matchesVietnameseQuery(libSearch, [t.name, t.description]));
+  }, [libCategory, libSearch, libSubject]);
 
   const sortedElements = useMemo(
     () => [...project.elements].sort((a, b) => a.zIndex - b.zIndex),
@@ -880,9 +891,16 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
     onNotify(res.message, 'success');
   };
 
+  const galleryResults = EXPANDED_DRAWING_PROJECTS.filter(s => (gallerySubject === 'all' || s.subject === gallerySubject) && (galleryGrade === 'all' || s.grade === galleryGrade || s.grade === 'chung') && matchesVietnameseQuery(gallerySearch,[s.name,s.topic,s.description || '']));
+  useEffect(() => {
+    if (studioMode !== 'canvas') return;
+    const frame = requestAnimationFrame(() => { handleFitContent(); });
+    return () => cancelAnimationFrame(frame);
+  }, [studioMode, project.id]);
+
   const modeTabs: { id: DrawingStudioMode; label: string; icon: React.ReactNode }[] = [
     { id: 'canvas', label: 'Bảng vẽ kéo thả', icon: <Compass className="w-4 h-4" /> },
-    { id: 'gallery', label: 'Kho hình mẫu (12)', icon: <BookTemplate className="w-4 h-4" /> },
+    { id: 'gallery', label: `Kho hình mẫu (${EXPANDED_DRAWING_PROJECTS.length})`, icon: <BookTemplate className="w-4 h-4" /> },
     { id: 'graph', label: 'Đồ thị hàm số', icon: <FunctionSquare className="w-4 h-4" /> },
     { id: 'variation', label: 'Bảng biến thiên', icon: <Table2 className="w-4 h-4" /> },
     { id: 'chart', label: 'Biểu đồ thống kê', icon: <BarChart3 className="w-4 h-4" /> },
@@ -895,6 +913,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
         isFullscreen ? 'fixed inset-2 z-50' : 'min-h-[calc(100vh-112px)]'
       }`}
     >
+      <input ref={jsonUploadRef} type="file" accept=".json,.smartdraw.json" onChange={handleImportJson} className="hidden" />
       {/* MODE SWITCHER BAR */}
       <div className="px-3.5 py-2 border-b border-slate-200 bg-white flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1.5">
@@ -929,17 +948,14 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
         <div className="p-5 space-y-4 overflow-y-auto flex-1 bg-slate-50/40">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="ui-section-title text-slate-900">Kho 12 dự án hình vẽ mẫu chuẩn in đề</h2>
+              <h2 className="ui-section-title text-slate-900">Kho hình vẽ khoa học</h2>
               <p className="ui-guide text-slate-600">
                 Chọn bất kì mẫu nào để mở bản sao chỉnh sửa trực tiếp trên Bảng vẽ kéo thả.
               </p>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {[
-                ['all', 'Tất cả (12)'],
-                ['toan', 'Toán học (4)'],
-                ['vat_li', 'Vật lí (4)'],
-                ['hoa_hoc', 'Hóa học (4)'],
+                ['all', 'Tất cả'], ['toan', 'Toán học'], ['vat_li', 'Vật lí'], ['hoa_hoc', 'Hóa học'], ['sinh_hoc','Sinh học'], ['tin_hoc','Tin học'], ['chung','Dùng chung'],
               ].map(([sub, lbl]) => (
                 <button
                   key={sub}
@@ -951,18 +967,25 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                   }`}
                 >
-                  {lbl}
+                  {lbl} ({EXPANDED_DRAWING_PROJECTS.filter(s => sub === 'all' || s.subject === sub).length})
                 </button>
               ))}
             </div>
           </div>
 
+          <div className="flex flex-wrap gap-2 items-center">
+            <input value={gallerySearch} onChange={e=>setGallerySearch(e.target.value)} placeholder="Tìm hình, chủ đề, dụng cụ..." className="flex-1 min-w-[200px] border rounded-lg p-3" />
+            <select value={galleryGrade} onChange={e=>setGalleryGrade(e.target.value)} className="border rounded-lg p-3" aria-label="Khối lớp"><option value="all">Mọi khối lớp</option><option value="10">Lớp 10</option><option value="11">Lớp 11</option><option value="12">Lớp 12</option></select>
+            <button className="bg-sky-600 text-white rounded-lg p-3" onClick={()=>{setProject(createEmptyProject());setSelectedIds([]);setHistory([]);setFuture([]);setStudioMode('canvas');}}>Tạo hình mới</button>
+            <button className="border rounded-lg p-3" onClick={()=>jsonUploadRef.current?.click()}>Mở dự án từ tệp</button>
+          </div>
+          <p className="ui-guide">{galleryResults.length} hình phù hợp · Mẫu dùng chung được hiển thị ở mọi khối lớp.</p>
+          {galleryResults.length === 0 && <p>Không tìm thấy hình phù hợp. Hãy đổi từ khóa hoặc bộ lọc.</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {SAMPLE_DRAWING_PROJECTS.filter(
-              (s) => gallerySubject === 'all' || s.subject === gallerySubject
-            ).map((sample) => {
+            {galleryResults.slice(0,galleryLimit).map((sample) => {
               const vw = Math.round(sample.widthCm * PX_PER_CM);
               const vh = Math.round(sample.heightCm * PX_PER_CM);
+              const bounds = getContentBoundingBox(sample.elements,vw,vh,true,20);
               return (
                 <div
                   key={sample.id}
@@ -970,7 +993,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                 >
                   <div className="space-y-2.5">
                     <div className="h-44 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center p-2 overflow-hidden">
-                      <svg viewBox={`0 0 ${vw} ${vh}`} className="max-w-full max-h-full">
+                      <svg viewBox={`${bounds.x} ${bounds.y} ${bounds.width} ${bounds.height}`} className="max-w-full max-h-full">
                         {sample.elements.map((el) => (
                           <SvgElementRenderer key={el.id} element={el} uniqueSuffix={`gal_${sample.id}`} />
                         ))}
@@ -984,6 +1007,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                     onClick={() => {
                       const cloned = cloneSampleAsUserProject(sample);
                       setProject(cloned);
+                      setHistory([]); setFuture([]);
                       setSelectedIds([]);
                       setStudioMode('canvas');
                       onNotify(`Đã mở bản sao "${sample.name}" để chỉnh sửa.`, 'success');
@@ -996,6 +1020,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
               );
             })}
           </div>
+          {galleryLimit < galleryResults.length && <button className="border rounded-lg p-3" onClick={()=>setGalleryLimit(n=>n+24)}>Xem thêm hình</button>}
         </div>
       )}
 
@@ -1765,13 +1790,16 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                 />
               </div>
 
+              <select aria-label="Môn học" value={libSubject} onChange={e=>{setLibSubject(e.target.value);setLibCategory('all');setLibSearch('');}} className="w-full border rounded-lg p-2 ui-input">
+                <option value="all">Tất cả môn</option><option value="toan">Toán học</option><option value="vat_li">Vật lí</option><option value="hoa_hoc">Hóa học</option><option value="sinh_hoc">Sinh học</option><option value="tin_hoc">Tin học</option><option value="chung">Dùng chung</option>
+              </select>
               <select
                 aria-label="Danh mục hình vẽ"
                 value={libCategory}
                 onChange={(e) => setLibCategory(e.target.value as DrawingCategory | 'all')}
                 className="w-full min-h-[40px] px-3 py-2 ui-input bg-white border border-slate-200 rounded-lg focus:outline-none focus:border-sky-600"
               >
-                {DRAWING_CATEGORY_LABELS.map((c) => (
+                {DRAWING_CATEGORY_LABELS.filter(c=>libSubject==='all'||c.id==='all'||c.id==='hinh_mau'||c.id==='co_ban'||(libSubject==='toan'&&c.id.startsWith('toan_'))||(libSubject==='vat_li'&&c.id.startsWith('ly_'))||(libSubject==='hoa_hoc'&&c.id.startsWith('hoa_'))||(['sinh_hoc','tin_hoc'].includes(libSubject)&&c.id==='sinh_tin')).map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.label}
                   </option>
@@ -1797,6 +1825,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
                         onClick={() => addTemplateAt(tpl.id)}
                         className="w-full text-left p-3 bg-white border border-slate-200 rounded-lg hover:border-teal-500 hover:bg-teal-50/40 transition-colors"
                       >
+                        <svg viewBox="-230 -170 460 340" className="w-full h-24" aria-hidden="true">{tpl.buildElements(0,0).map((el,i)=><SvgElementRenderer key={i} element={{...el,id:`preview_${tpl.id}_${i}`,zIndex:i}} uniqueSuffix={`sidebar_${tpl.id}_${i}`} />)}</svg>
                         <div className="ui-body font-semibold text-slate-900">{tpl.name}</div>
                         <div className="ui-caption text-slate-600 mt-1">{tpl.description}</div>
                       </button>
@@ -1878,10 +1907,10 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
               if (item) addItemAt(item, pt.x, pt.y);
             }
           }}
-          className="flex-1 bg-[#E2E8F0]/60 overflow-auto p-6 flex items-start justify-center min-h-[420px]"
+          className="flex-1 min-w-0 bg-[#E2E8F0]/60 overflow-auto p-4 flex items-start min-h-[420px] max-h-[65vh]"
         >
           <div
-            className="bg-white shadow-sm border border-slate-300 relative shrink-0"
+            className="bg-white shadow-sm border border-slate-300 relative shrink-0 mx-auto"
             style={{
               width: Math.round(canvasWidthPx * zoom),
               height: Math.round(canvasHeightPx * zoom),
@@ -2641,13 +2670,7 @@ export const DrawingStudioPage: React.FC<DrawingStudioPageProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <input
-            ref={jsonUploadRef}
-            type="file"
-            accept=".json,.smartdraw.json"
-            onChange={handleImportJson}
-            className="hidden"
-          />
+
           <button
             type="button"
             onClick={() => jsonUploadRef.current?.click()}
